@@ -29,8 +29,17 @@ RUN pip install playwright==1.55.0 && \
 # Copiar el proyecto completo
 COPY . .
 
+
+# Asegúrate de usar $PORT que provee Render
+ENV PORT=10000
+
+# Expón el puerto (opcional pero claro)
+EXPOSE $PORT
 # Exponer puerto
-EXPOSE 8010
+# EXPOSE 8010
 
 # Ejecutar FastAPI
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8010"]
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8010"]
+
+# Comando por defecto: uvicorn usando la variable $PORT
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT}"]
