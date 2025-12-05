@@ -3,15 +3,15 @@ Endpoints de API para análisis de polígonos
 """
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.models.schemas import PolygonCoordinates, APIResponse
 from src.services.polygon_service import polygon_service
 from src.utils.jwt_validator_util import verify_jwt_token
 router = APIRouter(prefix="/api/polygon", tags=["Polygon Analysis"])
 
 
-@router.post("/analyze", response_model=APIResponse)
-async def analyze_polygon(
+@router.post("/{schema}/analyze", response_model=APIResponse)
+async def analyze_polygon(schema: str, 
     polygon_data: PolygonCoordinates,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
@@ -59,7 +59,7 @@ async def analyze_polygon(
             )
         
         # Realizar análisis
-        result = polygon_service.analyze_polygon(polygon_data.coordinates, db)
+        result = polygon_service.analyze_polygon(polygon_data.coordinates, db, schema)
         result["tipo"] = polygon_data.type
         return APIResponse(
             success=True,

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 from typing import Dict, Any, Optional
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.services.contratos_services import ContratoService
 from src.schemas.contratos_schema import (PaginacionSchema, 
                                                 ContratoCreate,
@@ -13,19 +13,19 @@ from src.utils.jwt_validator_util import verify_jwt_token
 router = APIRouter()
 
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return ContratoService(db).all()
+    return ContratoService(db, schema).all()
 
 
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def lista(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def lista(schema: str, 
     page: int = Query(1, ge=1),
     per_page: int = Query(50, ge=1, le=200),
     activo: Optional[bool] = Query(True, description="Filtrar por estado activo (true o false)"),
@@ -35,8 +35,8 @@ def lista(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = ContratoService(db).list_contrato(activo=activo, skip=skip, limit=limit)
-    total = ContratoService(db).count_contrato(activo=activo)  
+    data = ContratoService(db, schema).list_contrato(activo=activo, skip=skip, limit=limit)
+    total = ContratoService(db, schema).count_contrato(activo=activo)  
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -50,52 +50,52 @@ def lista(
     }
     
     # endpoin de crear registro
-@router.post("/")
-def creates(request: Request, 
+@router.post("/{schema}/")
+def creates(schema: str, request: Request, 
                         payload: ContratoCreate, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ContratoService(dbs).create_contrato(payload, request, tokenpayload)
+    result = ContratoService(db, schema).create_contrato(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{contrato_id}")
-def get_show(contrato_id: int, 
+@router.get("/{schema}/{contrato_id}")
+def get_show(schema: str, contrato_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return ContratoService(db).show(contrato_id)
+    return ContratoService(db, schema).show(contrato_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{contrato_id}")
-def update(request: Request, 
+@router.put("/{schema}/{contrato_id}")
+def update(schema: str, request: Request, 
                         contrato_id: int,
                         payload: ContratoUpdate,
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ContratoService(dbs).update_contrato(contrato_id, payload, request, tokenpayload)
+    result = ContratoService(db, schema).update_contrato(contrato_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{contrato_id}")
-def delete(request: Request, 
+@router.delete("/{schema}/{contrato_id}")
+def delete(schema: str, request: Request, 
                         contrato_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ContratoService(dbs).delete_contrato(contrato_id, request, tokenpayload)
+    result = ContratoService(db, schema).delete_contrato(contrato_id, request, tokenpayload)
     return {"data": result}
 
 
-@router.post("/{contrato_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{contrato_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         contrato_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ContratoService(dbs).reactivate(contrato_id, request, tokenpayload)
+    result = ContratoService(db, schema).reactivate(contrato_id, request, tokenpayload)
     return {"data": result}

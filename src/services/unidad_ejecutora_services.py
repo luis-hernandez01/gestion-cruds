@@ -4,22 +4,24 @@ from fastapi import HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from src.models.logs_model import TipoOperacionEnum
-from src.models.unidad_ejecutora_model import (UnidadEjecutoraAika, UnidadEjecutoraWayra)
 from src.schemas.unidad_ejecutora_schema import LogEntityRead, UnidadEjecutoraCreate
-from src.utils.logs_util import LogUtil, registrar_log
+from src.utils.logs_util import LogUtil
 from sqlalchemy import asc
+from src.config.dinamic_tables import get_unidad_ejecutora_table
 
 # Servicio para listar las unidades de ejecucion
 class UnidadEjecutoraService:
-    def __init__(self, db: Session):
+    def __init__(self, db: Session, schema: str):
         self.db = db
+        self.schema = schema
+        self.table = get_unidad_ejecutora_table(schema)
     
     
     def all(self):
         return (
-            self.db.query(UnidadEjecutoraAika)
-            .filter(UnidadEjecutoraAika.activo == True)
-            .order_by(asc(UnidadEjecutoraAika.nombre))
+            self.db.query(self.table)
+            .filter(self.table.activo == True)
+            .order_by(asc(self.table.nombre))
             .all()
         )
         
@@ -27,41 +29,31 @@ class UnidadEjecutoraService:
     # servicio para listar  los registros
     def list_unidad_ejecutora(self, skip: int, limit: int, filtros: str | None = None,
                             activo: bool | None = None):
-        query = self.db.query(UnidadEjecutoraAika)
+        query = self.db.query(self.table)
         if activo is not None:
-            query = query.filter(UnidadEjecutoraAika.activo == activo)
+            query = query.filter(self.table.activo == activo)
         
         if filtros:
-            query = query.filter(UnidadEjecutoraAika.nombre.ilike(f"%{filtros}%"))
+            query = query.filter(self.table.nombre.ilike(f"%{filtros}%"))
         
-        return ( query.order_by(asc(UnidadEjecutoraAika.nombre))
+        return ( query.order_by(asc(self.table.nombre))
                 .offset(skip)
                 .limit(limit)
                 .all()
     )
-            
-        # return (
-        #     self.db.query(UnidadEjecutoraAika)
-        #     .filter(UnidadEjecutoraAika.activo == activo)
-        #     .filter(UnidadEjecutoraAika.nombre.ilike(f"%{filtros}%"))
-        #     .order_by(asc(UnidadEjecutoraAika.nombre))
-        #     .offset(skip)
-        #     .limit(limit)
-        #     .all()
-        # )
         
     
     def count_unidad_ejecutora(
         self,
         activo: bool | None = None,
         filtros: str | None = None):
-        query = self.db.query(UnidadEjecutoraAika)
+        query = self.db.query(self.table)
 
         if activo is not None:
-            query = query.filter(UnidadEjecutoraAika.activo == activo)
+            query = query.filter(self.table.activo == activo)
 
         if filtros:
-            query = query.filter(UnidadEjecutoraAika.nombre.ilike(f"%{filtros}%"))
+            query = query.filter(self.table.nombre.ilike(f"%{filtros}%"))
 
         return query.count()
 
@@ -70,9 +62,9 @@ class UnidadEjecutoraService:
         self, payload: UnidadEjecutoraCreate, request: Request, tokenpayload: dict
     ):
         unidadcreate = (
-            self.db[0].query(UnidadEjecutoraAika)
+            self.db.query(self.table)
             .filter(
-                UnidadEjecutoraAika.nombre == payload.nombre
+                self.table.nombre == payload.nombre
             )
             .first()
         )
@@ -92,26 +84,22 @@ class UnidadEjecutoraService:
                 detail="El campo nombre no puede tener un rango mayor a 255 caracteres",
             )
         
-        modelos = [UnidadEjecutoraAika, UnidadEjecutoraWayra]
-        resultados = []
-        for modelo, db in zip(modelos, self.db):
-            try:
-                entity = modelo(
-                    nombre=payload.nombre,
-                    descripcion=payload.descripcion,
-                    id_persona=tokenpayload.get("sub"),
-                    activo=True,
-                    created_at=datetime.utcnow(),
-                )
-                db.add(entity)
-                db.commit()
-                db.refresh(entity)
-            except Exception as e:
-                db.rollback()
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
-                                detail=f"Error insertando en {modelo.__table__.schema}: {e}")
-        registrar_log(
-            LogUtil(self.db),
+        
+        try:
+            entity = self.table(
+                nombre=payload.nombre,
+                descripcion=payload.descripcion,
+                id_persona=tokenpayload.get("sub"),
+                activo=True,
+                created_at=datetime.utcnow(),
+            )
+            self.db.add(entity)
+            self.db.commit()
+            self.db.refresh(entity)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
+                            detail=f"Error insertando : {e}")
+        LogUtil(self.db, self.schema).registrar_log(
             tabla_afectada="unidad_ejecutora",
             id_registro_afectado=entity.id,
             tipo_operacion=TipoOperacionEnum.INSERT.value,
@@ -119,7 +107,7 @@ class UnidadEjecutoraService:
             datos_viejos=None,
             id_persona_operacion=entity.id_persona,
             ip_origen=request.client.host,
-            user_agent=1,
+            user_agent=request.headers.get("User-Agent", "")[:255],
         )
         return LogEntityRead.from_orm(entity)
 
@@ -127,8 +115,8 @@ class UnidadEjecutoraService:
 
     def show(self, unidad_id: int):
         entity = (
-            self.db.query(UnidadEjecutoraAika)
-            .filter(UnidadEjecutoraAika.id == unidad_id, UnidadEjecutoraAika.activo == True)
+            self.db.query(self.table)
+            .filter(self.table.id == unidad_id, self.table.activo == True)
             .first()
         )
         if not entity:
@@ -152,16 +140,16 @@ class UnidadEjecutoraService:
         tokenpayload: dict,
     ):
         dataupdate = (
-            self.db[0].query(UnidadEjecutoraAika)
-            .filter(UnidadEjecutoraAika.id == unidad_id, UnidadEjecutoraAika.activo == True)
+            self.db.query(self.table)
+            .filter(self.table.id == unidad_id, self.table.activo == True)
             .first()
         )
         if payload.nombre:
             existe = (
-                self.db[0].query(UnidadEjecutoraAika)
+                self.db.query(self.table)
                 .filter(
-                    UnidadEjecutoraAika.nombre == payload.nombre,
-                    UnidadEjecutoraAika.id != unidad_id,
+                    self.table.nombre == payload.nombre,
+                    self.table.id != unidad_id,
                 )
                 .first()
             )
@@ -188,30 +176,26 @@ class UnidadEjecutoraService:
             )
         datos_viejos = LogEntityRead.from_orm(dataupdate).model_dump(mode="json")
             
-        modelos = [UnidadEjecutoraAika, UnidadEjecutoraWayra]
-        for modelo, db in zip(modelos, self.db):
-            try:
-                dataupdate = (
-                    db.query(modelo)
-                    .filter(modelo.id == unidad_id, modelo.activo == True)
-                    .first()
-                )
-                
-                if dataupdate:
-                    dataupdate.nombre = payload.nombre
-                    dataupdate.descripcion = payload.descripcion
-                    dataupdate.id_persona = tokenpayload.get("sub")
-                    dataupdate.updated_at = datetime.utcnow()
-                    db.commit()
-                    db.refresh(dataupdate)
-            except Exception as e:
-                db.rollback()
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
-                                detail=f"Error insertando en {modelo.__table__.schema}: {e}")
+        try:
+            dataupdate = (
+                self.db.query(self.table)
+                .filter(self.table.id == unidad_id, self.table.tablelo.activo == True)
+                .first()
+            )
+            
+            if dataupdate:
+                dataupdate.nombre = payload.nombre
+                dataupdate.descripcion = payload.descripcion
+                dataupdate.id_persona = tokenpayload.get("sub")
+                dataupdate.updated_at = datetime.utcnow()
+                self.db.commit()
+                self.db.refresh(dataupdate)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
+                            detail=f"Error insertando : {e}")
         
         # Registro de logs
-        registrar_log(
-            LogUtil(self.db),
+        LogUtil(self.db, self.schema).registrar_log(
             tabla_afectada="unidad_ejecutora",
             id_registro_afectado=dataupdate.id,
             tipo_operacion=TipoOperacionEnum.UPDATE.value,
@@ -219,7 +203,7 @@ class UnidadEjecutoraService:
             datos_viejos=datos_viejos,
             id_persona_operacion=dataupdate.id_persona,
             ip_origen=request.client.host,
-            user_agent=1,
+            user_agent=request.headers.get("User-Agent", "")[:255],
         )
 
         return LogEntityRead.from_orm(dataupdate)
@@ -229,8 +213,8 @@ class UnidadEjecutoraService:
     # servicio para eliminar logicamente un registro
     def delete_unidad(self, unidad_id: int, request: Request, tokenpayload: dict):
         datadelete = (
-            self.db[0].query(UnidadEjecutoraAika)
-            .filter(UnidadEjecutoraAika.id == unidad_id, UnidadEjecutoraAika.activo == True)
+            self.db.query(self.table)
+            .filter(self.table.id == unidad_id, self.table.activo == True)
             .first()
         )
         if not datadelete:
@@ -240,29 +224,24 @@ class UnidadEjecutoraService:
             )
         
         datos_viejos = LogEntityRead.from_orm(datadelete).model_dump(mode="json")
-        modelos = [UnidadEjecutoraAika, UnidadEjecutoraWayra]
-        for modelo, db in zip(modelos, self.db):
-            try:
-                registro = db.query(modelo).filter(modelo.id == unidad_id, modelo.activo == True).first()
-                if not registro:
-                    continue
-                # le paso un valor false para realizar un sofdelete para un eliminado logico
-                registro.activo = False
-                registro.deleted_at = datetime.utcnow()
-                registro.id_persona = tokenpayload.get("sub")
-                # guardar los cambios
-                db.commit()
-                db.refresh(registro)
-
-                
-            except Exception as e:
-                db.rollback()
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
-                                detail=f"Error insertando en {modelo.__table__.schema}: {e}")
+        
+        try:
+            registro = self.db.query(self.table).filter(self.table.id == unidad_id, self.table.activo == True).first()
+            if not registro:
+                return {"detail": "Registro no encontrado"}
+            # le paso un valor false para realizar un sofdelete para un eliminado logico
+            registro.activo = False
+            registro.deleted_at = datetime.utcnow()
+            registro.id_persona = tokenpayload.get("sub")
+            # guardar los cambios
+            self.db.commit()
+            self.db.refresh(registro)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
+                            detail=f"Error insertando : {e}")
                 
         
-        registrar_log(
-                    LogUtil(self.db),
+        LogUtil(self.db, self.schema).registrar_log(
                     tabla_afectada="unidad_ejecutora",
                     id_registro_afectado=registro.id,
                     tipo_operacion=TipoOperacionEnum.DELETE.value,
@@ -270,7 +249,7 @@ class UnidadEjecutoraService:
                     datos_viejos=datos_viejos,
                     id_persona_operacion=registro.id_persona,
                     ip_origen=request.client.host,
-                    user_agent=1,
+                    user_agent=request.headers.get("User-Agent", "")[:255],
                 )
 
         return LogEntityRead.from_orm(datadelete)
@@ -278,8 +257,8 @@ class UnidadEjecutoraService:
 
 # servicio para reactivar logicamente un registro
     def reactivate(self, unidad_id: int, request: Request, tokenpayload: dict):
-        datareactivate = self.db[0].query(UnidadEjecutoraAika).filter(
-            UnidadEjecutoraAika.id == unidad_id).first()
+        datareactivate = self.db.query(self.table).filter(
+            self.table.id == unidad_id).first()
         if not datareactivate:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="El registro no fue hallada")
         
@@ -287,28 +266,23 @@ class UnidadEjecutoraService:
             raise HTTPException(status_code=status.HTTP_200_OK, detail="El registro ya se encuentra activo")
         datos_viejos = LogEntityRead.from_orm(datareactivate).model_dump(mode="json")
         
-        modelos = [UnidadEjecutoraAika, UnidadEjecutoraWayra]
-        for modelo, db in zip(modelos, self.db):
-            try:
-                
-                registro = db.query(modelo).filter(modelo.id == unidad_id).first()
-                if not registro:
-                    continue
-            # le paso un valor false para realizar un sofdelete para un eliminado logico
-                registro.activo = True
-                registro.deleted_at = datetime.utcnow()
-                registro.id_persona = tokenpayload.get("sub")
-                # guardar los cambios
-                db.commit()
-                db.refresh(registro)
-                
-                
-            except Exception as e:
-                db.rollback()
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
-                                detail=f"Error insertando en {modelo.__table__.schema}: {e}")
         
-        registrar_log(LogUtil(self.db),
+        try:
+            registro = self.db.query(self.table).filter(self.table.id == unidad_id).first()
+            if not registro:
+                return {"detail": "Registro no encontrado"}
+        # le paso un valor false para realizar un sofdelete para un eliminado logico
+            registro.activo = True
+            registro.deleted_at = datetime.utcnow()
+            registro.id_persona = tokenpayload.get("sub")
+            # guardar los cambios
+            self.db.commit()
+            self.db.refresh(registro)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
+                            detail=f"Error insertando : {e}")
+        
+        LogUtil(self.db, self.schema).registrar_log(
                     tabla_afectada="unidad_ejecutora",
                     id_registro_afectado=registro.id,
                     tipo_operacion=TipoOperacionEnum.REACTIVATE,
@@ -316,5 +290,5 @@ class UnidadEjecutoraService:
                     datos_viejos=datos_viejos,
                     id_persona_operacion=registro.id_persona,
                     ip_origen=request.client.host,
-                    user_agent=1)
+                    user_agent=request.headers.get("User-Agent", "")[:255])
         return LogEntityRead.from_orm(registro)

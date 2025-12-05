@@ -10,7 +10,7 @@ from src.schemas.Combustibles_emisiones_schema import (
 )
 from src.services.combustibles_emision_services import CombustibleService
 from src.utils.jwt_validator_util import verify_jwt_token
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 
 
 
@@ -20,18 +20,18 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return CombustibleService(db).all()
+    return CombustibleService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def listar(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def listar(schema: str, 
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -45,8 +45,8 @@ def listar(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = CombustibleService(db).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
-    total = CombustibleService(db).count(activo=activo, filtros=filtros)
+    data = CombustibleService(db, schema).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
+    total = CombustibleService(db, schema).count(activo=activo, filtros=filtros)
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -62,59 +62,59 @@ def listar(
     # endpoin de crear registro
 
 
-@router.post("/")
-def create(
+@router.post("/{schema}/")
+def create(schema: str, 
     request: Request,
     payload: CombustibleCreate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = CombustibleService(dbs).create(payload, request, tokenpayload)
+    result = CombustibleService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{combustible_id}")
-def get_show(combustible_id: int, 
+@router.get("/{schema}/{combustible_id}")
+def get_show(schema: str, combustible_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return CombustibleService(db).show(combustible_id)
+    return CombustibleService(db, schema).show(combustible_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{combustible_id}")
-def update(
+@router.put("/{schema}/{combustible_id}")
+def update(schema: str, 
     request: Request,
     combustible_id: int,
     payload: CombustibleUpdate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = CombustibleService(dbs).update(combustible_id, payload, request, tokenpayload)
+    result = CombustibleService(db, schema).update(combustible_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{combustible_id}")
-def delete(
+@router.delete("/{schema}/{combustible_id}")
+def delete(schema: str, 
     request: Request,
     combustible_id: int,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = CombustibleService(dbs).delete(combustible_id, request, tokenpayload)
+    result = CombustibleService(db, schema).delete(combustible_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{combustible_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{combustible_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         combustible_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = CombustibleService(dbs).reactivate(combustible_id, request, tokenpayload)
+    result = CombustibleService(db, schema).reactivate(combustible_id, request, tokenpayload)
     return {"data": result}

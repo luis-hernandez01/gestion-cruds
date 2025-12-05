@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.schemas.Unidades_factores_emision_schema import (
     UnidadFactorCreate,
     PaginacionSchema,
@@ -17,18 +17,18 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return UnidadfactorService(db).all()
+    return UnidadfactorService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def listar(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def listar(schema: str, 
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -42,8 +42,8 @@ def listar(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = UnidadfactorService(db).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
-    total = UnidadfactorService(db).count(activo=activo, filtros=filtros,)
+    data = UnidadfactorService(db, schema).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
+    total = UnidadfactorService(db, schema).count(activo=activo, filtros=filtros,)
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -59,59 +59,59 @@ def listar(
     # endpoin de crear registro
 
 
-@router.post("/")
-def create(
+@router.post("/{schema}/")
+def create(schema: str, 
     request: Request,
     payload: UnidadFactorCreate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = UnidadfactorService(dbs).create(payload, request, tokenpayload)
+    result = UnidadfactorService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{unidadfactor_id}")
-def get_show(unidadfactor_id: int, 
+@router.get("/{schema}/{unidadfactor_id}")
+def get_show(schema: str, unidadfactor_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return UnidadfactorService(db).show(unidadfactor_id)
+    return UnidadfactorService(db, schema).show(unidadfactor_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{unidadfactor_id}")
-def update_unidades(
+@router.put("/{schema}/{unidadfactor_id}")
+def update_unidades(schema: str, 
     request: Request,
     unidadfactor_id: int,
     payload: UnidadFactorUpdate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = UnidadfactorService(dbs).update(unidadfactor_id, payload, request, tokenpayload)
+    result = UnidadfactorService(db, schema).update(unidadfactor_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{unidadfactor_id}")
-def delete(
+@router.delete("/{schema}/{unidadfactor_id}")
+def delete(schema: str, 
     request: Request,
     unidadfactor_id: int,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = UnidadfactorService(dbs).delete(unidadfactor_id, request, tokenpayload)
+    result = UnidadfactorService(db, schema).delete(unidadfactor_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{unidadfactor_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{unidadfactor_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         unidadfactor_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = UnidadfactorService(dbs).reactivate(unidadfactor_id, request, tokenpayload)
+    result = UnidadfactorService(db, schema).reactivate(unidadfactor_id, request, tokenpayload)
     return {"data": result}

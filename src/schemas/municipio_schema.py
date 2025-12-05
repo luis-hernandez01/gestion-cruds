@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class MunicipioSchema(BaseModel):
@@ -19,11 +19,15 @@ class MunicipioSchema(BaseModel):
 
 class municipioCreate(BaseModel):
     codigo_departamento: str = Field(..., max_length=2, description="Código del departamento asociado")
-    codigo_municipio: str = Field(..., max_length=5, description="Código único del municipio")
+    codigo_municipio: Union[str, int] = Field(..., max_length=5, description="Código único del municipio")
     nombre_municipio: str = Field(..., max_length=100, description="Nombre del municipio")
     tipo_municipio: Optional[str] = Field(default="Municipio", max_length=50)
     latitud: Optional[float] = Field(default=None, description="Latitud del municipio")
     longitud: Optional[float] = Field(default=None, description="Longitud del municipio")
+
+    @field_validator("codigo_municipio", mode="before")
+    def normalize_codigo(cls, v):
+        return str(v)
 
 
 class MunicipioUpdate(BaseModel):
@@ -33,7 +37,10 @@ class MunicipioUpdate(BaseModel):
     tipo_municipio: Optional[str] = Field(default="Municipio", max_length=50)
     latitud: Optional[float] = Field(default=None, description="Latitud del municipio")
     longitud: Optional[float] = Field(default=None, description="Longitud del municipio")
-
+    
+    @field_validator("codigo_municipio", mode="before")
+    def normalize_codigo(cls, v):
+        return str(v)
 
 class MunicipioResponse(MunicipioSchema):
     id: int

@@ -13,10 +13,12 @@ class DepartamentoSchema(BaseModel):
 
 class DepartamentoCreate(BaseModel):
     nombre: str = Field(..., max_length=100, description="Nombre del departamento")
+    codigo: str = Field(..., max_length=2, description="Código del departamento (2 dígitos)")
 
 
 class DepartamentoUpdate(BaseModel):
     nombre: str = Field(..., max_length=100, description="Nombre del departamento")
+    codigo: str = Field(..., max_length=4, description="Código del departamento (4 dígitos)")
 
 
 class DepartamentoResponse(DepartamentoSchema):

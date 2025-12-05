@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 from typing import Dict, Any, Optional
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.services.TipoClasificacionModos_services import TipoClasificacionModosService
 from src.schemas.TipoClasificacionModos_schema import (PaginacionSchema, 
                                                 TipoClasificacionModosCreate,
@@ -13,20 +13,20 @@ from src.utils.jwt_validator_util import verify_jwt_token
 router = APIRouter()
 
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     id_modo: int,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return TipoClasificacionModosService(db).all(id_modo)
+    return TipoClasificacionModosService(db, schema).all(id_modo)
 
 
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def listar(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def listar(schema: str, 
     page: int = Query(1, ge=1),
     per_page: int = Query(50, ge=1, le=200),
     activo: Optional[bool] = Query(True, description="Filtrar por estado activo (true o false)"),
@@ -40,8 +40,8 @@ def listar(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = TipoClasificacionModosService(db).list_tipo_clasificacion(activo=activo, filtros=filtros, skip=skip, limit=limit)
-    total = TipoClasificacionModosService(db).count_tipo_clasificacion(activo=activo, filtros=filtros)  
+    data = TipoClasificacionModosService(db, schema).list_tipo_clasificacion(activo=activo, filtros=filtros, skip=skip, limit=limit)
+    total = TipoClasificacionModosService(db, schema).count_tipo_clasificacion(activo=activo, filtros=filtros)  
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -55,55 +55,54 @@ def listar(
     }
     
     # endpoin de crear registro
-@router.post("/")
-def create(request: Request, 
+@router.post("/{schema}/")
+def create(schema: str, request: Request, 
                         payload: TipoClasificacionModosCreate, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)
-                        # tokenpayload: dict = {"sub": 2}
                         ):
-    result = TipoClasificacionModosService(dbs).create_tipo_clasificacion(payload, request, tokenpayload)
+    result = TipoClasificacionModosService(db, schema).create_tipo_clasificacion(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{tipo_clasificacion_id}")
-def get_show(tipo_clasificacion_id: int, 
+@router.get("/{schema}/{tipo_clasificacion_id}")
+def get_show(schema: str, tipo_clasificacion_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return TipoClasificacionModosService(db).show(tipo_clasificacion_id)
+    return TipoClasificacionModosService(db, schema).show(tipo_clasificacion_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{tipo_clasificacion_id}")
-def update_unidades(request: Request, 
+@router.put("/{schema}/{tipo_clasificacion_id}")
+def update_unidades(schema: str, request: Request, 
                         tipo_clasificacion_id: int,
                         payload: TipoClasificacionModosUpdate,
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = TipoClasificacionModosService(dbs).update_tipo_clasificacion(tipo_clasificacion_id, payload, request, tokenpayload)
+    result = TipoClasificacionModosService(db, schema).update_tipo_clasificacion(tipo_clasificacion_id, payload, request, tokenpayload)
     return {"data": result}
     
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{tipo_clasificacion_id}")
-def delete(request: Request, 
+@router.delete("/{schema}/{tipo_clasificacion_id}")
+def delete(schema: str, request: Request, 
                         tipo_clasificacion_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = TipoClasificacionModosService(dbs).delete_tipo_clasificacion(tipo_clasificacion_id, request, tokenpayload)
+    result = TipoClasificacionModosService(db, schema).delete_tipo_clasificacion(tipo_clasificacion_id, request, tokenpayload)
     return {"data": result}
 
 
-@router.post("/{tipo_clasificacion_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{tipo_clasificacion_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         tipo_clasificacion_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = TipoClasificacionModosService(dbs).reactivate(tipo_clasificacion_id, request, tokenpayload)
+    result = TipoClasificacionModosService(db, schema).reactivate(tipo_clasificacion_id, request, tokenpayload)
     return {"data": result}

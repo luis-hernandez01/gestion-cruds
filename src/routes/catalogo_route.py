@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 from typing import Dict, Any, Optional
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.services.catalogo_services import catalogoService
 from src.schemas.catalogomodoXtipoclasificacion_schema import (PaginacionSchema, 
                                                 CatalogoCreate,
@@ -12,19 +12,19 @@ from src.utils.jwt_validator_util import verify_jwt_token
 # inicializacion del roter
 router = APIRouter()
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     id_modo: int, id_tipo: int,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return catalogoService(db).all(id_modo, id_tipo)
+    return catalogoService(db, schema).all(id_modo, id_tipo)
 
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def lista(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def lista(schema: str, 
     page: int = Query(1, ge=1),
     per_page: int = Query(50, ge=1, le=200),
     activo: Optional[bool] = Query(True, description="Filtrar por estado activo (true o false)"),
@@ -38,8 +38,8 @@ def lista(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = catalogoService(db).list_catalogo(activo=activo, filtros=filtros, skip=skip, limit=limit)
-    total = catalogoService(db).count_catalogo(activo=activo, filtros=filtros)  
+    data = catalogoService(db, schema).list_catalogo(activo=activo, filtros=filtros, skip=skip, limit=limit)
+    total = catalogoService(db, schema).count_catalogo(activo=activo, filtros=filtros)  
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -53,66 +53,52 @@ def lista(
     }
     
     # endpoin de crear registro
-@router.post("/")
-def creates(request: Request, 
+@router.post("/{schema}/")
+def creates(schema: str, request: Request, 
                         payload: CatalogoCreate, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)
-                        # tokenpayload: dict = {"sub": 2}
                         ):
-    result = catalogoService(dbs).create_catalogo(payload, request, tokenpayload)
+    result = catalogoService(db, schema).create_catalogo(payload, request, tokenpayload)
     return {"data": result}
-
-# @router.post("/")
-# def creates(request: Request, 
-#                         payload: CatalogoCreate, 
-#                         # de esta manera llamo todas las bases de datos existentes
-#                         # dbs: list[Session] = Depends(get_dbs),
-#                         dbs: Session = Depends(get_session),
-#                         tokenpayload: dict = Depends(verify_jwt_token)
-#                         # tokenpayload: dict = {"sub": 2}
-#                         ):
-    
-#     result = catalogoService(dbs).create_catalogo(payload, request, tokenpayload)
-#     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{catalogo_id}")
-def get_show(catalogo_id: int, 
+@router.get("/{schema}/{catalogo_id}")
+def get_show(schema: str, catalogo_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return catalogoService(db).show(catalogo_id)
+    return catalogoService(db, schema).show(catalogo_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{catalogo_id}")
-def update(request: Request, 
+@router.put("/{schema}/{catalogo_id}")
+def update(schema: str, request: Request, 
                         catalogo_id: int,
                         payload: CatalogoUpdate,
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = catalogoService(dbs).update_catalogo(catalogo_id,payload, request, tokenpayload)
+    result = catalogoService(db, schema).update_catalogo(catalogo_id,payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{catalogo_id}")
-def delete(request: Request, 
+@router.delete("/{schema}/{catalogo_id}")
+def delete(schema: str, request: Request, 
                         catalogo_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = catalogoService(dbs).delete_catalogo(catalogo_id, request, tokenpayload)
+    result = catalogoService(db, schema).delete_catalogo(catalogo_id, request, tokenpayload)
     return {"data": result}
 
-@router.post("/{catalogo_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{catalogo_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         catalogo_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = catalogoService(dbs).reactivate(catalogo_id, request, tokenpayload)
+    result = catalogoService(db, schema).reactivate(catalogo_id, request, tokenpayload)
     return {"data": result}

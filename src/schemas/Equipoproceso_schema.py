@@ -1,0 +1,46 @@
+from datetime import datetime
+from typing import List, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class equipoprocesoSchema(BaseModel):
+    id: int
+    nombre: str
+    activo: bool
+
+
+class equipoprocesoCreate(BaseModel):
+    nombre: str
+    id_tipo_fuente: Optional[int] = Field(None, description="tipo fuente a la que pertenece el tramo")
+
+
+class equipoprocesoUpdate(BaseModel):
+    nombre: str
+    id_tipo_fuente: Optional[int] = Field(None, description="tipo fuente a la que pertenece el tramo")
+
+
+class equipoprocesoResponse(equipoprocesoSchema):
+    id: int
+
+
+class LogEntityRead(BaseModel):
+    id: int
+    nombre: str
+    id_persona: Optional[int]
+    activo: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    deleted_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class PaginacionSchema(BaseModel):
+    items: List[equipoprocesoSchema]
+    per_page: int
+    size: int
+    total: int
+    page: int
+    pages: int
+    last_page:int

@@ -6,9 +6,10 @@ import os
 from typing import List, Dict, Any
 from shapely.geometry import shape, Polygon as ShapelyPolygon
 from sqlalchemy.orm import Session
-from src.models.divipola import DepartamentoAika, MunicipioAika
 from src.config.config import DATA_DIR, MUNICIPIOS_GEOJSON, DEPARTAMENTOS_GEOJSON
 
+from src.config.dinamic_tables import get_divipola_depar_table
+from src.config.dinamic_tables import get_municipio_table
 
 class PolygonAnalysisService:
     """Servicio para análisis geoespacial de polígonos"""
@@ -36,7 +37,7 @@ class PolygonAnalysisService:
                 self._departamentos_geojson = json.load(f)
         return self._departamentos_geojson
     
-    def analyze_polygon(self, polygon_coords: List[List[List[float]]], db: Session) -> Dict[str, Any]:
+    def analyze_polygon(self, polygon_coords: List[List[List[float]]], db: Session, schema: str) -> Dict[str, Any]:
         """
         Analiza un polígono y retorna municipios y departamentos intersectados
         
@@ -47,6 +48,10 @@ class PolygonAnalysisService:
         Returns:
             Dict con análisis completo
         """
+        self.schema = schema
+        self.table = get_divipola_depar_table(schema)
+        self.table2 = get_municipio_table(schema)
+        
         # Crear polígono Shapely
         user_polygon = ShapelyPolygon(polygon_coords[0])
         
@@ -80,8 +85,8 @@ class PolygonAnalysisService:
 
 
                     # Buscar información en MySQL
-                    municipio_db = db.query(MunicipioAika).filter(
-                        MunicipioAika.codigo_municipio == cod_mpio
+                    municipio_db = db.query(self.table2).filter(
+                        self.table2.codigo_municipio == cod_mpio
                     ).first()
                     
                     if municipio_db:
@@ -90,8 +95,8 @@ class PolygonAnalysisService:
                         porcentaje_area = (intersection.area / municipio_geom.area) * 100
                         
                         # Obtener departamento
-                        departamento_db = db.query(DepartamentoAika).filter(
-                            DepartamentoAika.codigo == municipio_db.codigo_departamento
+                        departamento_db = db.query(self.table).filter(
+                            self.table.codigo == municipio_db.codigo_departamento
                         ).first()
                         
                         municipios_intersectados.append({
@@ -124,8 +129,8 @@ class PolygonAnalysisService:
                     cod_dpto = props.get('DPTO') or props.get('DPTO')
                     
                     # Buscar información en MySQL
-                    depto_db = db.query(DepartamentoAika).filter(
-                        DepartamentoAika.codigo == cod_dpto
+                    depto_db = db.query(self.table).filter(
+                        self.table.codigo == cod_dpto
                     ).first()
                     
                     if depto_db:

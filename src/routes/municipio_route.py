@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 from typing import Dict, Any, Optional
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.services.municipio_services import MunicipioService
 from src.schemas.municipio_schema import (PaginacionSchema, 
                                                 municipioCreate,
@@ -12,18 +12,18 @@ from src.utils.jwt_validator_util import verify_jwt_token
 # inicializacion del roter
 router = APIRouter()
 
-@router.get("/all")
-def list_all( codigo_departamento: str,
+@router.get("/{schema}/all")
+def list_all( schema: str, codigo_departamento: str,
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return MunicipioService(db).all(codigo_departamento)
+    return MunicipioService(db, schema).all(codigo_departamento)
 
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def lista(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def lista(schema: str, 
     page: int = Query(1, ge=1),
     per_page: int = Query(50, ge=1, le=200),
     activo: Optional[bool] = Query(True, description="Filtrar por estado activo (true o false)"),
@@ -41,9 +41,9 @@ def lista(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = MunicipioService(db).list_municipio(activo=activo, filtros=filtros, 
+    data = MunicipioService(db, schema).list_municipio(activo=activo, filtros=filtros, 
                                             filtros_dep=filtros_dep, skip=skip, limit=limit)
-    total = MunicipioService(db).count_municipio(activo=activo, filtros=filtros, filtros_dep=filtros_dep)  
+    total = MunicipioService(db, schema).count_municipio(activo=activo, filtros=filtros, filtros_dep=filtros_dep)  
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -57,52 +57,52 @@ def lista(
     }
     
     # endpoin de crear registro
-@router.post("/")
-def creates(request: Request, 
+@router.post("/{schema}/")
+def creates(schema: str, request: Request, 
                         payload: municipioCreate, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = MunicipioService(dbs).create_municipio(payload, request, tokenpayload)
+    result = MunicipioService(db, schema).create_municipio(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{municipio_id}")
-def get_show(municipio_id: int, 
+@router.get("/{schema}/{municipio_id}")
+def get_show(schema: str, municipio_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return MunicipioService(db).show(municipio_id)
+    return MunicipioService(db, schema).show(municipio_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{municipio_id}")
-def update(request: Request, 
+@router.put("/{schema}/{municipio_id}")
+def update(schema: str, request: Request, 
                         municipio_id: int,
                         payload: MunicipioUpdate,
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = MunicipioService(dbs).update_municipio(municipio_id, payload, request, tokenpayload)
+    result = MunicipioService(db, schema).update_municipio(municipio_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{municipio_id}")
-def delete(request: Request, 
+@router.delete("/{schema}/{municipio_id}")
+def delete(schema: str, request: Request, 
                         municipio_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = MunicipioService(dbs).delete_municipio(municipio_id, request, tokenpayload)
+    result = MunicipioService(db, schema).delete_municipio(municipio_id, request, tokenpayload)
     return {"data": result}
 
 
-@router.post("/{municipio_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{municipio_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         municipio_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = MunicipioService(dbs).reactivate(municipio_id, request, tokenpayload)
+    result = MunicipioService(db, schema).reactivate(municipio_id, request, tokenpayload)
     return {"data": result}

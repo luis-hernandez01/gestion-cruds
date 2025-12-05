@@ -8,13 +8,19 @@ from sqlalchemy.orm import Session
 from shapely.geometry import LineString, shape
 from shapely.ops import transform
 import pyproj
-from src.models.divipola import DepartamentoAika as Departamento, MunicipioAika as Municipio
+# from src.models.divipola import DepartamentoAika as Departamento, MunicipioAika as Municipio
+
+from src.config.dinamic_tables import get_divipola_depar_table
+from src.config.dinamic_tables import get_municipio_table
+
 from src.config.config import DATA_DIR, MUNICIPIOS_GEOJSON, DEPARTAMENTOS_GEOJSON
 
 class LineService:
     """Servicio para analizar líneas y determinar por qué municipios/departamentos pasa"""
     
     def __init__(self):
+        
+        
         # Cargar GeoJSON de municipios y departamentos
         self.municipios_geojson =  self._load_geojson(os.path.join(DATA_DIR, MUNICIPIOS_GEOJSON))
         self.departamentos_geojson = self._load_geojson(os.path.join(DATA_DIR, DEPARTAMENTOS_GEOJSON))
@@ -47,7 +53,7 @@ class LineService:
             # Fallback: aproximación simple
             return line.length * 111.0  # Aproximación: 1 grado ≈ 111 km
     
-    def analyze_line(self, coordinates: List[List[float]], db: Session) -> Dict[str, Any]:
+    def analyze_line(self, coordinates: List[List[float]], db: Session, schema: str) -> Dict[str, Any]:
         """
         Analiza una línea y determina por qué municipios y departamentos pasa
         
@@ -58,6 +64,9 @@ class LineService:
         Returns:
             Diccionario con el análisis completo
         """
+        self.schema = schema
+        self.table = get_divipola_depar_table(schema)
+        self.table2 = get_municipio_table(schema)
         try:
             # Crear geometría de línea
             line = LineString(coordinates)
@@ -82,14 +91,14 @@ class LineService:
                             municipios_ids.add(codigo_mpio)
                             
                             # Buscar en BD
-                            municipio_db = db.query(Municipio).filter(
-                                Municipio.codigo_municipio == codigo_mpio
+                            municipio_db = db.query(self.table2).filter(
+                                self.table2.codigo_municipio == codigo_mpio
                             ).first()
                             
                             if municipio_db:
                                 # Buscar departamento
-                                departamento_db = db.query(Departamento).filter(
-                                    Departamento.codigo == municipio_db.codigo_departamento
+                                departamento_db = db.query(self.table).filter(
+                                    self.table.codigo == municipio_db.codigo_departamento
                                 ).first()
                                 
                                 municipios_encontrados.append({
@@ -120,8 +129,8 @@ class LineService:
                             departamentos_ids.add(codigo_depto)
                             
                             # Buscar en BD
-                            depto_db = db.query(Departamento).filter(
-                                Departamento.codigo == codigo_depto
+                            depto_db = db.query(self.table).filter(
+                                self.table.codigo == codigo_depto
                             ).first()
                             
                             if depto_db:

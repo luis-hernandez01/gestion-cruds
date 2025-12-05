@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 from typing import Dict, Any, Optional
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.services.profesion_services import ProfesionService
 from src.schemas.profesion_schema import (PaginacionSchema, 
                                                 ProfesionCreate,
@@ -12,17 +12,17 @@ from src.utils.jwt_validator_util import verify_jwt_token
 # inicializacion del roter
 router = APIRouter()
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return ProfesionService(db).all()
+    return ProfesionService(db, schema).all()
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def lista(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def lista(schema: str, 
     page: int = Query(1, ge=1),
     per_page: int = Query(50, ge=1, le=200),
     activo: Optional[bool] = Query(True, description="Filtrar por estado activo (true o false)"),
@@ -36,8 +36,8 @@ def lista(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = ProfesionService(db).list_profesion(activo=activo, filtros=filtros, skip=skip, limit=limit)
-    total = ProfesionService(db).count_profesion(activo=activo, filtros=filtros)  
+    data = ProfesionService(db, schema).list_profesion(activo=activo, filtros=filtros, skip=skip, limit=limit)
+    total = ProfesionService(db, schema).count_profesion(activo=activo, filtros=filtros)  
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -51,53 +51,53 @@ def lista(
     }
     
     # endpoin de crear registro
-@router.post("/")
-def creates(request: Request, 
+@router.post("/{schema}/")
+def creates(schema: str, request: Request, 
                         payload: ProfesionCreate, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ProfesionService(dbs).create_profesion(payload, request, tokenpayload)
+    result = ProfesionService(db, schema).create_profesion(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{profesion_id}")
-def get_show(profesion_id: int, 
+@router.get("/{schema}/{profesion_id}")
+def get_show(schema: str, profesion_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return ProfesionService(db).show(profesion_id)
+    return ProfesionService(db, schema).show(profesion_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{profesion_id}")
-def update(request: Request, 
+@router.put("/{schema}/{profesion_id}")
+def update(schema: str, request: Request, 
                         profesion_id: int,
                         payload: ProfesionUpdate,
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ProfesionService(dbs).update_profesion(profesion_id, payload, request, tokenpayload)
+    result = ProfesionService(db, schema).update_profesion(profesion_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{profesion_id}")
-def delete(request: Request, 
+@router.delete("/{schema}/{profesion_id}")
+def delete(schema: str, request: Request, 
                         profesion_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ProfesionService(dbs).delete_profesion(profesion_id, request, tokenpayload)
+    result = ProfesionService(db, schema).delete_profesion(profesion_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{profesion_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{profesion_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         profesion_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = ProfesionService(dbs).reactivate(profesion_id, request, tokenpayload)
+    result = ProfesionService(db, schema).reactivate(profesion_id, request, tokenpayload)
     return {"data": result}

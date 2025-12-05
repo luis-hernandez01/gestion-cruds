@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.schemas.unidad_ejecutora_schema import (
     UnidadEjecutoraCreate,
     PaginacionSchema,
@@ -17,18 +17,18 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return UnidadEjecutoraService(db).all()
+    return UnidadEjecutoraService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def list_unidades(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def list_unidades(schema: str, 
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -42,9 +42,9 @@ def list_unidades(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = UnidadEjecutoraService(db).list_unidad_ejecutora(activo=activo, filtros=filtros,
+    data = UnidadEjecutoraService(db, schema).list_unidad_ejecutora(activo=activo, filtros=filtros,
                                                             skip=skip, limit=limit)
-    total = UnidadEjecutoraService(db).count_unidad_ejecutora(activo=activo, filtros=filtros)
+    total = UnidadEjecutoraService(db, schema).count_unidad_ejecutora(activo=activo, filtros=filtros)
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -60,59 +60,59 @@ def list_unidades(
     # endpoin de crear registro
 
 
-@router.post("/")
-def create_unidades(
+@router.post("/{schema}/")
+def create_unidades(schema: str, 
     request: Request,
     payload: UnidadEjecutoraCreate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = UnidadEjecutoraService(dbs).create_unidad(payload, request, tokenpayload)
+    result = UnidadEjecutoraService(db, schema).create_unidad(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{unidad_id}")
-def get_show(unidad_id: int, 
+@router.get("/{schema}/{unidad_id}")
+def get_show(schema: str, unidad_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return UnidadEjecutoraService(db).show(unidad_id)
+    return UnidadEjecutoraService(db, schema).show(unidad_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{unidad_id}")
-def update_unidades(
+@router.put("/{schema}/{unidad_id}")
+def update_unidades(schema: str, 
     request: Request,
     unidad_id: int,
     payload: UnidadEjecutoraUpdate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = UnidadEjecutoraService(dbs).update_unidad(unidad_id, payload, request, tokenpayload)
+    result = UnidadEjecutoraService(db, schema).update_unidad(unidad_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{unidad_id}")
-def delete_unidades(
+@router.delete("/{schema}/{unidad_id}")
+def delete_unidades(schema: str, 
     request: Request,
     unidad_id: int,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = UnidadEjecutoraService(dbs).delete_unidad(unidad_id, request, tokenpayload)
+    result = UnidadEjecutoraService(db, schema).delete_unidad(unidad_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{unidad_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{unidad_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         unidad_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = UnidadEjecutoraService(dbs).reactivate(unidad_id, request, tokenpayload)
+    result = UnidadEjecutoraService(db, schema).reactivate(unidad_id, request, tokenpayload)
     return {"data": result}

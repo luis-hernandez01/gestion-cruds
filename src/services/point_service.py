@@ -8,8 +8,10 @@ from sqlalchemy.orm import Session
 from shapely.geometry import Point, shape
 from shapely.ops import transform
 import pyproj
-from src.models.divipola import DepartamentoAika, MunicipioAika
 from src.config.config import DATA_DIR, MUNICIPIOS_GEOJSON, DEPARTAMENTOS_GEOJSON
+
+from src.config.dinamic_tables import get_divipola_depar_table
+from src.config.dinamic_tables import get_municipio_table
 
 class PointService:
     """Servicio para analizar puntos y determinar en qué municipio/departamento se encuentra"""
@@ -45,7 +47,7 @@ class PointService:
             # Fallback: aproximación simple
             return point1.distance(point2) * 111.0  # Aproximación: 1 grado ≈ 111 km
     
-    def analyze_point(self, coordinates: List[float], db: Session) -> Dict[str, Any]:
+    def analyze_point(self, coordinates: List[float], db: Session, schema: str) -> Dict[str, Any]:
         """
         Analiza un punto y determina en qué municipio y departamento se encuentra
         
@@ -56,6 +58,10 @@ class PointService:
         Returns:
             Diccionario con el análisis completo
         """
+        self.schema = schema
+        self.table = get_divipola_depar_table(schema)
+        self.table2 = get_municipio_table(schema)
+        
         try:
             # Crear geometría de punto
             point = Point(coordinates)
@@ -74,14 +80,14 @@ class PointService:
                         
                         if codigo_mpio:
                             # Buscar en BD
-                            municipio_db = db.query(MunicipioAika).filter(
-                                MunicipioAika.codigo_municipio == codigo_mpio
+                            municipio_db = db.query(self.table2).filter(
+                                self.table2.codigo_municipio == codigo_mpio
                             ).first()
                             
                             if municipio_db:
                                 # Buscar departamento
-                                departamento_db = db.query(DepartamentoAika).filter(
-                                    DepartamentoAika.codigo == municipio_db.codigo_departamento
+                                departamento_db = db.query(self.table).filter(
+                                    self.table.codigo == municipio_db.codigo_departamento
                                 ).first()
                                 
                                 # Calcular distancia al centroide del municipio
@@ -122,9 +128,9 @@ class PointService:
         """Encuentra el municipio más cercano al punto"""
         try:
             # Obtener todos los municipios con coordenadas
-            municipios = db.query(MunicipioAika).filter(
-                MunicipioAika.latitud.isnot(None),
-                MunicipioAika.longitud.isnot(None)
+            municipios = db.query(self.table2).filter(
+                self.table2.latitud.isnot(None),
+                self.table.longitud.isnot(None)
             ).all()
             
             min_distance = float('inf')
@@ -140,8 +146,8 @@ class PointService:
             
             if nearest_municipio:
                 # Buscar departamento
-                departamento_db = db.query(DepartamentoAika).filter(
-                    DepartamentoAika.codigo == nearest_municipio.codigo_departamento
+                departamento_db = db.query(self.table).filter(
+                    self.table.codigo == nearest_municipio.codigo_departamento
                 ).first()
                 
                 return {

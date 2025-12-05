@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 
-from src.config.config import (get_db, get_dbs)
+from src.config.config import (get_db)
 from src.schemas.Categoria_emisiones_schema import (
     CategoriaCreate,
     PaginacionSchema,
@@ -17,18 +17,18 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/all")
-def list_all(
+@router.get("/{schema}/all")
+def list_all(schema: str, 
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    return CategoriaService(db).all()
+    return CategoriaService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/", response_model=PaginacionSchema)
-def listar(
+@router.get("/{schema}/", response_model=PaginacionSchema)
+def listar(schema: str, 
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -42,8 +42,8 @@ def listar(
 ) -> Dict[str, Any]:
     skip = (page - 1) * per_page
     limit = per_page
-    data = CategoriaService(db).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
-    total = CategoriaService(db).count(activo=activo, filtros=filtros)
+    data = CategoriaService(db, schema).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
+    total = CategoriaService(db, schema).count(activo=activo, filtros=filtros)
     # Método adicional para contar todos los datos
     return {
         "items": data,
@@ -59,59 +59,59 @@ def listar(
     # endpoin de crear registro
 
 
-@router.post("/")
-def create(
+@router.post("/{schema}/")
+def create(schema: str, 
     request: Request,
     payload: CategoriaCreate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = CategoriaService(dbs).create(payload, request, tokenpayload)
+    result = CategoriaService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{categoria_id}")
-def get_show(categoria_id: int, 
+@router.get("/{schema}/{categoria_id}")
+def get_show(schema: str, categoria_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
-    return CategoriaService(db).show(categoria_id)
+    return CategoriaService(db, schema).show(categoria_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{categoria_id}")
-def update_unidades(
+@router.put("/{schema}/{categoria_id}")
+def update_unidades(schema: str, 
     request: Request,
     categoria_id: int,
     payload: CategoriaUpdate,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = CategoriaService(dbs).update(categoria_id, payload, request, tokenpayload)
+    result = CategoriaService(db, schema).update(categoria_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{categoria_id}")
-def delete_unidades(
+@router.delete("/{schema}/{categoria_id}")
+def delete_unidades(schema: str, 
     request: Request,
     categoria_id: int,
     # de esta manera llamo todas las bases de datos existentes
-    dbs: list[Session] = Depends(get_dbs),
+    db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
-    result = CategoriaService(dbs).delete(categoria_id, request, tokenpayload)
+    result = CategoriaService(db, schema).delete(categoria_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{categoria_id}/reactivate")
-def reactivates(request: Request, 
+@router.post("/{schema}/{categoria_id}/reactivate")
+def reactivates(schema: str, request: Request, 
                         categoria_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
-                        dbs: list[Session] = Depends(get_dbs),
+                        db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
-    result = CategoriaService(dbs).reactivate(categoria_id, request, tokenpayload)
+    result = CategoriaService(db, schema).reactivate(categoria_id, request, tokenpayload)
     return {"data": result}
