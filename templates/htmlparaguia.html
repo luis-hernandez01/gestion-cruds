@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe del Contrato</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #333; }
+        .campo { margin-bottom: 12px; }
+        .label { font-weight: bold; }
+    </style>
+</head>
+
+<body>
+
+    <h1>Información del Contrato</h1>
+
+    <div class="campo">
+        <span class="label">Código:</span> {{ data.contract_code }}
+    </div>
+
+    <div class="campo">
+        <span class="label">Contratista:</span> {{ data.data.step_1.proyecto.unidad_ejecutora }}
+    </div>
+
+    <div class="campo">
+        <span class="label">Objeto:</span> {{ data.object }}
+    </div>
+
+    <div class="campo">
+        <span class="label">Valor:</span> ${{ data.amount }}
+    </div>
+
+    <div class="campo">
+        <span class="label">Fecha inicio:</span> {{ data.start_date }}
+    </div>
+
+</body>
+</html>

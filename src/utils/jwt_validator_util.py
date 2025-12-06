@@ -36,6 +36,46 @@ def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(securit
         )
 
 
+
+
+# from jose import jwt, JWTError
+# from fastapi import HTTPException, status, Depends
+# from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+# from datetime import datetime
+# from src.config.config import SECRET_KEY, ALGORITHM
+
+# security = HTTPBearer()
+
+def others_verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """
+    Verifica el token JWT y retorna tanto su payload como el token original.
+    """
+    token = credentials.credentials
+    try:
+        # Decodificar el token
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        
+        exp = payload.get("exp")
+        if datetime.utcnow().timestamp() > exp:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token expirado",
+            )
+
+        # 🔹 Devolvemos ambos: el token y el payload
+        return {"token": token, "payload": payload}
+
+    except JWTError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Token inválido: {str(e)}",
+        )
+        
+        
+        
+        
+
+
 # sin funcionalidad aun
 def require_permission(required_permission: str):
     def _checker(request: Request):

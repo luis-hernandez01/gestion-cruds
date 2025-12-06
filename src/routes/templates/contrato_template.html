@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte Institucional</title>
+
+<style>
+    body {
+        font-family: "Helvetica", Arial, sans-serif;
+        margin: 50px;
+        color: #333;
+    }
+
+    /* =============================
+       PORTADA
+    ============================== */
+    .portada {
+        text-align: center;
+        margin-top: 120px;
+    }
+
+    .portada img {
+        width: 140px;
+    }
+
+    .portada h1 {
+        font-size: 36px;
+        margin-top: 40px;
+        color: #003366;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .portada p {
+        margin-top: 30px;
+        font-size: 18px;
+        color: #555;
+    }
+
+    .page-break {
+        page-break-before: always;
+    }
+
+    /* =============================
+       ENCABEZADO INSTITUCIONAL
+    ============================== */
+    .encabezado {
+        border-bottom: 3px solid #003366;
+        padding-bottom: 10px;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    .encabezado img {
+        width: 80px;
+        margin-right: 20px;
+    }
+
+    .encabezado .titulo-encabezado h2 {
+        color: #003366;
+        margin: 0;
+        font-size: 22px;
+        text-transform: uppercase;
+    }
+
+    .encabezado .titulo-encabezado p {
+        margin: 2px 0 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* =============================
+       TITULOS Y PARRAFOS
+    ============================== */
+    h2 {
+        color: #003366;
+        border-left: 5px solid #003366;
+        padding-left: 10px;
+        margin-top: 40px;
+        font-size: 20px;
+    }
+
+    p {
+        line-height: 1.5;
+        text-align: justify;
+        margin-bottom: 15px;
+    }
+
+    /* =============================
+       TABLAS INSTITUCIONALES
+    ============================== */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        margin-bottom: 30px;
+        font-size: 14px;
+    }
+
+    table th {
+        background-color: #e6eef6;
+        color: #003366;
+        text-align: left;
+        border: 1px solid #bfc9d5;
+        padding: 8px;
+        font-weight: bold;
+    }
+
+    table td {
+        border: 1px solid #bfc9d5;
+        padding: 8px;
+    }
+
+    /* =============================
+       IMÁGENES
+    ============================== */
+    .image-container {
+        text-align: center;
+        margin: 25px 0;
+    }
+
+    .image-container img {
+        width: 450px;
+        border: 1px solid #ccc;
+        padding: 4px;
+        background: #f9f9f9;
+    }
+
+    /* =============================
+       PIE DE PÁGINA
+    ============================== */
+    .footer {
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+        margin-top: 60px;
+        border-top: 2px solid #003366;
+        padding-top: 8px;
+    }
+</style>
+</head>
+
+<body>
+
+    <!-- =============================
+        PORTADA DEL DOCUMENTO
+    ============================== -->
+    <div class="portada">
+        <img src="https://qhantati.serviciostic.net/calidad_invias.png" alt="INVIAS"  style="displayd:block;">
+        <h6 style="margin:2px 0;">INSTITUTO NACIONAL DE VÍAS</h6>
+        <h6 style="margin:2px 0;">PROCESO MISIONAL GESTIÓN AMBIENTAL, SOCIAL, PREDIAL Y DE SOSTENIBILIDAD DE PROYECTOS</h6>
+        <h6 style="margin:2px 0;">MANUAL DE INTERVENTORÍA OBRA PÚBLICA</h6>
+        <h6 style="margin:2px 0;">CÁLCULO DE EMISIONES</h6>
+        <p>Subdirección de sostenibilidad<br>Monitor de sostenibilidad</p>
+        <p><strong>Fecha:</strong> 2025-11-18</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- =============================
+        ENCABEZADO
+    ============================== -->
+    <div class="encabezado">
+        <h1 style="margin:0 0 20px 0; font-size:36px; color:#2E3A59;">WAYRA</h1>
+        <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Logo_Unesco.png" alt="Logo"> -->
+        <div class="titulo-encabezado">
+            <h2>Reporte Técnico - Área de Datos</h2>
+            <p>Sistema Institucional de Información</p>
+        </div>
+    </div>
+
+<!-- <div class="encabezado" style="display:flex; align-items:center; justify-content:center; gap:20px; padding:30px; background-color:#f5f5f5; font-family:Arial, sans-serif;">
+    <div >
+        <h1 style="margin:0; font-size:36px; color:#2E3A59;">WAYRA</h1>
+    </div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Logo_Unesco.png" alt="Logo" style="height:80px;">
+    <div class="titulo-encabezado">
+        <h2 style="margin:0; font-size:20px; color:#333;">Reporte Técnico - Área de Datos</h2>
+        <p style="margin:5px 0 0; font-size:14px; color:#555;">Sistema Institucional de Información</p>
+    </div>
+</div> -->
+
+    <!-- =============================
+         CUERPO DEL INFORME
+    ============================== -->
+
+    <h2>1. INTRODUCCIÓN</h2>
+    <p>
+        El presente informe institucional consolida información técnica, operativa y administrativa
+        relevante para la toma de decisiones estratégicas. Este formato está diseñado para presentar
+        datos de forma clara, ordenada y profesional según estándares gubernamentales.
+    </p>
+
+    <h2>2. INFORMACIÓN GENERAL</h2>
+    <table>
+        <tr>
+            <th>Unidad ejecutora</th>
+            <td>{{ data.data.step_1.proyecto.unidad_ejecutora }}</td>
+        </tr>
+        <tr>
+            <th>Dirección territorial</th>
+            <td>{{ data.data.step_1.proyecto.direccion_territorial }}</td>
+        </tr>
+        <tr>
+            <th>Contrato de obra N°</th>
+            <td>{{ data.data.step_1.proyecto.contratos.obra.numero }}</td>
+        </tr>
+        <tr>
+            <th>Contrato de interventoría N°</th>
+            <td>{{ data.data.step_1.proyecto.contratos.interventoria.numero }}</td>
+        </tr>
+    </table>
+
+
+    <table>
+        <tr>
+            <th>Informe número</th>
+            <th>Del</th>
+            <th>Al</th>
+            <th>Mensual</th>
+        </tr>
+        <tr>
+            <td>01</td>
+            <td>01-Junio-2025</td>
+            <td>30-Junio-2025</td>
+            <td>Trimestre</td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <th colspan="100%" style="text-align: center;">Objeto del proyecto</th>
+        </tr>
+        <tr>
+            <td colspan="100%">
+                <p style="text-align: justify;">
+                    {{ data.data.step_1.proyecto.objeto }}
+                </p>
+            </td>
+        </tr>
+
+
+        <tr>
+            <th>Tipo de proyecto</th>
+            <th>Licenciado</th>
+            <th>Resolución N°</th>
+            <th>No licenciado - paga</th>
+        </tr>
+        <tr>
+            <td>Licenciado</td>
+            <td>Licenciado</td>
+            <td>30-Junio-2025</td>
+            <td>$</td>
+        </tr>
+    </table>
+
+
+    <h2>3. DATOS GENERALES </h2>
+    <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
+    3.1. CONTRATISTA </h2>
+
+    <table>
+        <tr>
+            <th>NIT</th>
+            <td>12345678</td>
+        </tr>
+        <tr>
+            <th>Nombre contratista</th>
+            <td>Carlos Delgado</td>
+        </tr>
+        <tr>
+            <th>Nombre del representante legal</th>
+            <td>Daniel Quiroga</td>
+        </tr>
+        <tr>
+            <th>Cedula</th>
+            <td>12345678</td>
+        </tr>
+        <tr>
+            <th>Nombre del director de obra</th>
+            <td>Nairo Quintana</td>
+        </tr>
+        <tr>
+            <th>Cedula</th>
+            <td>12345678</td>
+        </tr>
+        <tr>
+            <th>Dirección de la empresa</th>
+            <td>cra 6ta</td>
+        </tr>
+        <tr>
+            <th>Celular</th>
+            <td>32345678</td>
+        </tr>
+        <tr>
+            <th>Correo electrónico</th>
+            <td>Prueba@gmail.com</td>
+        </tr>
+    </table>
+
+    <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
+    3.2. INTERVENTORIA </h2>
+
+
+    <table>
+        <tr>
+            <th>NIT</th>
+            <td>12345678</td>
+        </tr>
+        <tr>
+            <th>Nombre contratista</th>
+            <td>Carlos Delgado</td>
+        </tr>
+        <tr>
+            <th>Nombre del representante legal</th>
+            <td>Daniel Quiroga</td>
+        </tr>
+        <tr>
+            <th>Cedula</th>
+            <td>12345678</td>
+        </tr>
+        <tr>
+            <th>Nombre del director de obra</th>
+            <td>Nairo Quintana</td>
+        </tr>
+        <tr>
+            <th>Cedula</th>
+            <td>12345678</td>
+        </tr>
+        <tr>
+            <th>Dirección de la empresa</th>
+            <td>cra 6ta</td>
+        </tr>
+        <tr>
+            <th>Celular</th>
+            <td>32345678</td>
+        </tr>
+        <tr>
+            <th>Correo electrónico</th>
+            <td>Prueba@gmail.com</td>
+        </tr>
+    </table>
+
+    <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
+    3.3. INVIAS- SOSTENIBILIDAD (Trimestrales) </h2>
+
+
+
+
+    <table>
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">Profesional apoyo asignado grupo de sostenibilidad de la subdirección de sostenibilidad</th>
+        </tr>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo electrónico</th>
+        </tr>
+        <tr>
+            <td>Anderson</td>
+            <td>Prueba@gmail.com</td>
+        </tr>
+    </table>
+
+    <h2>4. PERSONAL SOSTENIBILIDAD </h2>
+    <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
+    4.1. ESPECIALISTAS  DE SOSTENIBILIDAD </h2>
+
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>N° cedula</th>
+            <th>Cargp</th>
+            <th>Titulo</th>
+            <th>Correo electrónico</th>
+        </tr>
+        <tr>
+            <td>David Murcia</td>
+            <td>12345</td>
+            <td>Abogado</td>
+            <td>Analista</td>
+            <td>Prueba@gmail.com</td>
+        </tr>
+    </table>
+
+<h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
+    4.2. PROFESIONALES DE APOYO A LA SOSTENIBILIDAD  </h2>
+
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>N° cedula</th>
+            <th>Cargp</th>
+            <th>Titulo</th>
+            <th>Correo electrónico</th>
+        </tr>
+        <tr>
+            <td>David Murcia</td>
+            <td>12345</td>
+            <td>Abogado</td>
+            <td>Analista</td>
+            <td>Prueba@gmail.com</td>
+        </tr>
+    </table>
+
+<h2>5. INFORMACIÓN PRESUPUESTAL</h2>
+
+
+<table>
+        <tr>
+            <th>Valor inicial  de obra</th>
+            <td>$ 1000000</td>
+        </tr>
+        <tr>
+            <th>Valor adicional de obra N°</th>
+            <td>$ 20000000</td>
+        </tr>
+        <tr>
+            <th>Valor total de la obra </th>
+            <td>$ 3000000</td>
+        </tr>
+        <tr>
+            <th>Valor Provisión  Sostenibilidad</th>
+            <td>$ 40000000</td>
+        </tr>
+        <tr>
+            <th>Valor Provisión Adicional 1 Sostenibilidad</th>
+            <td>$ </td>
+        </tr>
+        <tr>
+            <th>Valor Provisión Adicional 2 Sostenibilidad</th>
+            <td>$ </td>
+        </tr>
+        <tr>
+            <th>Valor Total Provisión Sostenibilidad</th>
+            <td>$ 4000000</td>
+        </tr>
+        <tr>
+            <th>Valor Total Provisión Sostenibilidad Pagado</th>
+            <td>$ 400000000</td>
+        </tr>
+    </table>
+
+<h2>6.  UBICACIÓN DEL PROYECTO</h2>
+
+
+
+<table>
+        <tr>
+            <th>Departamento</th>
+            <th>Municipio</th>
+            <th>Georreferenciación</th>
+            <th>PR</th>
+            <th>Nombre de la vía</th>
+            <th>Nombre tramo</th>
+            <th>Clasificación del proyecto de acuerdo al POT</th>
+            <th>Porcentaje</th>
+        </tr>
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+        </tr>
+    </table>
+
+
+    <h2>7.  DESCRIPCIÓN GENERAL DEL PROYECTO</h2>
+
+    <table>
+        <tr>
+            <th>Modo</th>
+            <th>Funcionalidad</th>
+            <th>Categorización del proyecto</th>
+            <th>Observaciones</th>
+        </tr>
+        <tr>
+            <td>Fluvial</td>
+            <td>Terciaria </td>
+            <td>Mejoramiento</td>
+            <td>N/A</td>
+        </tr>
+    </table>
+
+    <h2>8. CALCULO DE EMISIONES</h2>
+    <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
+    8.1. FUENTES MÓVILES</h2>
+
+    <h2 style="margin: 4px 0 10px; font-size: 15px; color:#444; font-weight:600;">
+    8.1.1. FUENTES MÓVILES (Vehículos)</h2>
+
+
+
+    <div style="writing-mode: vertical-rl; transform: rotate(180deg);">
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">
+                Fuente: Vehiculos
+            </th>
+        </tr>
+        <tr>
+            <th>Implementan propuesta de eficiencia </th>
+            <th>Tipo de propuesta </th>
+            <th>Combustibles convencional</th>
+            <th>Combustible/energético con propuesta</th>
+            <th>Consumo de combustible convencional (gal)</th>
+            <th>Consumo de combustible/ energía con propuesta (gal/kwh) </th>
+            <th>N2O(kg/km)</th>
+            <th>CO2(Kg/gal)</th>
+            <th>CH4(kg/km)</th>
+            <th>N2O</th>
+            <th>CO2</th>
+            <th>CH4</th>
+            <th>Unidades de los factores de emisión con propuesta</th>
+            <th>Rendimiento del Vehículo convencional  (Gal/Km)</th>
+            <th>Rendimiento del Vehículo con propuesta (Gal/Km) o (Kwh/Km)</th>
+            <th>Observaciones/ Soportes</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+        </tr>
+
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+<h2 style="margin: 4px 0 10px; font-size: 15px; color:#444; font-weight:600;">
+    8.1.2. FUENTES MÓVILES (Maquinarias)</h2>
+
+
+
+
+    <div style="writing-mode: vertical-rl; transform: rotate(180deg);">
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">
+                Fuente: Maquinaria
+            </th>
+        </tr>
+        <tr>
+            <th>Implementan propuesta de eficiencia </th>
+            <th>Tipo de propuesta </th>
+            <th>Combustibles convencional</th>
+            <th>Combustible/energético con propuesta</th>
+            <th>Consumo de combustible convencional (gal)</th>
+            <th>Consumo de combustible/ energía con propuesta (gal/kwh) </th>
+            <th>N2O(kg/km)</th>
+            <th>CO2(Kg/gal)</th>
+            <th>CH4(kg/km)</th>
+            <th>N2O</th>
+            <th>CO2</th>
+            <th>CH4</th>
+            <th>Unidades de los factores de emisión con propuesta</th>
+            <th>Observaciones/ Soportes</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+        </tr>
+
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+        </tr>
+    </table>
+</div>
+
+
+<h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
+    8.2. FUENTES FIJAS</h2>
+
+
+
+
+
+    <div style="writing-mode: vertical-rl; transform: rotate(180deg);">
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">
+                Fuente: Planta de generación energía eléctrica
+            </th>
+        </tr>
+        <tr>
+            <th>Categoria</th>
+            <th>Implementan propuesta de eficiencia </th>
+            <th>Tipo de propuesta </th>
+            <th>Combustibles convencional</th>
+            <th>Combustible/energético con propuesta</th>
+            <th>Consumo de combustible convencional (gal)</th>
+            <th>Consumo de combustible/ energía con propuesta (gal/kwh) </th>
+            <th>N2O(Kg/gal)</th>
+            <th>CO2(Kg/gal)</th>
+            <th>CH4(kg/km)</th>
+            <th>N2O</th>
+            <th>CO2</th>
+            <th>CH4</th>
+            <th>Unidades de los factores de emisión con propuesta</th>
+            <th>Observaciones/ Soportes</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+        </tr>
+
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Troncal del Magdalena</td>
+        </tr>
+    </table>
+</div>
+
+
+
+<h2 style="margin: 4px 0 10px; font-size: 15px; color:#444; font-weight:600;">
+    8.2.1. FUENTES FIJAS (Energía combustible)</h2>
+
+    <div style="writing-mode: vertical-rl; transform: rotate(180deg);">
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">
+                Fuente: Planta de generación energía eléctrica
+            </th>
+        </tr>
+        <tr>
+            <th>Categoria</th>
+            <th>Implementan propuesta de eficiencia </th>
+            <th>Tipo de propuesta </th>
+            <th>Combustibles convencional</th>
+            <th>Combustible/energético con propuesta</th>
+            <th>Consumo de combustible convencional (gal)</th>
+            <th>Consumo de combustible/ energía con propuesta (gal/kwh) </th>
+            <th>N2O(Kg/gal)</th>
+            <th>CO2(Kg/gal)</th>
+            <th>CH4(kg/km)</th>
+            <th>N2O</th>
+            <th>CO2</th>
+            <th>CH4</th>
+            <th>Unidades de los factores de emisión con propuesta</th>
+            <th>Observaciones/ Soportes</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+        </tr>
+
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Troncal del Magdalena</td>
+        </tr>
+    </table>
+</div>
+
+
+<h2 style="margin: 4px 0 10px; font-size: 15px; color:#444; font-weight:600;">
+    8.2.2. FUENTES FIJAS (Energía red)</h2>
+
+
+    <div style="writing-mode: vertical-rl; transform: rotate(180deg);">
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">
+                Fuente: Planta de generación energía eléctrica
+            </th>
+        </tr>
+        <tr>
+            <th>Categoria</th>
+            <th>Implementan propuesta de eficiencia </th>
+            <th>Tipo de propuesta </th>
+            <th>Combustibles convencional</th>
+            <th>Combustible/energético con propuesta</th>
+            <th>Consumo de combustible convencional (gal)</th>
+            <th>Consumo de combustible/ energía con propuesta (gal/kwh) </th>
+            <th>N2O(Kg/gal)</th>
+            <th>CO2(Kg/gal)</th>
+            <th>CH4(kg/km)</th>
+            <th>N2O</th>
+            <th>CO2</th>
+            <th>CH4</th>
+            <th>Unidades de los factores de emisión con propuesta</th>
+            <th>Observaciones/ Soportes</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+        </tr>
+
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Troncal del Magdalena</td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+<h2 style="margin: 4px 0 10px; font-size: 15px; color:#444; font-weight:600;">
+    8.2.3. FUENTES FIJAS (Materiales)</h2>
+
+
+
+    <div style="writing-mode: vertical-rl; transform: rotate(180deg);">
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">
+                Fuente: Planta de generación energía eléctrica
+            </th>
+        </tr>
+        <tr>
+            <th>Categoria</th>
+            <th>Implementan propuesta de eficiencia </th>
+            <th>Tipo de propuesta </th>
+            <th>Combustibles convencional</th>
+            <th>Combustible/energético con propuesta</th>
+            <th>Consumo de combustible convencional (gal)</th>
+            <th>Consumo de combustible/ energía con propuesta (gal/kwh) </th>
+            <th>N2O(Kg/gal)</th>
+            <th>CO2(Kg/gal)</th>
+            <th>CH4(kg/km)</th>
+            <th>N2O</th>
+            <th>CO2</th>
+            <th>CH4</th>
+            <th>Unidades de los factores de emisión con propuesta</th>
+            <th>Observaciones/ Soportes</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+            <th>N2O (kg)</th>
+            <th>CO2(kg)</th>
+            <th>CH4(kg)</th>
+        </tr>
+
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+            <td>100%</td>
+
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Troncal del Magdalena</td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+<h2>9. CALCULO DE LA HUELLA DE CARBONO </h2>
+
+
+
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th >Fuentes</th>
+            <th>N2O convencional (TonCo2eq)</th>
+            <th>CO2 convencional (TonCo2eq)</th>
+            <th>CH4 convencional (TonCo2eq)</th>
+            <th>N2O con propuesta (TonCo2eq)</th>
+            <th>CO2 con propuesta(TonCo2eq)</th>
+            <th>CH4 con propuesta(TonCo2eq)</th>
+            <th>Emisiones totales convencionalmente (Ton CO2e) </th>
+            <th>Emisiones totales con propuesta(Ton CO2e) </th>
+        </tr>
+
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+
+            <td>111</td>
+            <td>33333</td>
+        </tr>
+    </table>
+
+
+    <table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th >Alcance</th>
+            <th>N2O convencional (TonCo2eq)</th>
+            <th>CO2 convencional (TonCo2eq)</th>
+            <th>CH4 convencional (TonCo2eq)</th>
+            <th>N2O con propuesta (TonCo2eq)</th>
+            <th>CO2 con propuesta(TonCo2eq)</th>
+            <th>CH4 con propuesta(TonCo2eq)</th>
+            <th>Emisiones totales convencionalmente (Ton CO2e) </th>
+            <th>Emisiones totales con propuesta(Ton CO2e) </th>
+        </tr>
+ 
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>Troncal del Magdalena</td>
+            <td>Tramo 1</td>
+            <td>Suelo  rural </td>
+
+            <td>2333</td>
+            <td>1111</td>
+        </tr>
+        <tr>
+            <td colspan="7">Total huella de carbono trimestral (Ton CO2e)</td>
+            <th>6.122</th>
+            <th>7.55</th>
+        </tr>
+        <tr>
+            <td colspan="7">Reducción huella de carbono implementación medidas de eficiencia (Ton CO2e) </td>
+            <th colspan="2" style="text-align: center;">13.1</th>
+        </tr>
+    </table>
+
+
+<h2>10. AVANCE DE PROYECTO DE OBRA POR TIPOLOGÍA</h2>
+
+
+<table border="1" style="border-collapse: collapse; background:white; font-size:12px;">
+        <tr>
+            <th colspan="100%" style="text-align:center; padding:6px 0;">
+                Modos: Marítimo
+            </th>
+        </tr>
+        <tr>
+            <th >Tipología de proyecto</th>
+            <th>Actividad</th>
+            <th>Avance de obra(Km)</th>
+            <th>Código de vía</th>
+            <th>PR INICIAL</th>
+            <th>PR FINAL</th>
+        </tr>
+ 
+        <tr>
+            <td>Chocó</td>
+            <td>Quibdó</td>
+            <td>xxxxxx</td>
+            <td>11111</td>
+            <td>3333333</td>
+            <td>12222</td>
+            
+        </tr>
+        
+    </table>
+
+
+    <h2>NOTAS</h2>
+    <p>
+        1. Es responsabilidad del Interventor y del Contratista dar cumplimiento a lo establecido en la Resolución 405 del 13 de febrero del 2020 y actualizada mediante la Resolución 1314 del 20 de abril de 2022 por la cual se adoptó la POLÍTICA DE SOSTENIBILIDAD PARA LA INFRAESTRUCTURA DE TRANSPORTE  Y SE CREA EL COMITE DE SOSTENIBILIDAD DEL INSTITUTO NACIONAL DE VÍAS- INVIAS así como lo indicado en el apéndice de Sostenibilidad.
+    </p>
+    <p>
+        2. Es responsabilidad del contratista el diligenciamiento del presente formato.
+    </p>
+    <p>
+        3. Es responsabilidad de la interventoría dar seguimiento, control, aprobación y complementación del presente formato, para posteriormente radicar al grupo de Sostenibilidad de la Subdirección de Sostenibilidad.
+    </p>
+    <p>
+        4. El Interventor y el Contratista asumen plena responsabilidad por la veracidad de la información y de los datos registrados en el presente formato y la congruencia del mismo.
+    </p>
+
+    <div style="text-align:center; margin-top:40px; font-size:12px; line-height:1.4;">
+        <p style="margin:0;">______________________________</p>
+        <p style="margin:4px 0 0 0;">Nombre</p>
+        <p style="margin:0;">Director de obra</p>
+        <p style="margin:0;">Matrícula No. ____________</p>
+    </div>
+
+
+    <div style="text-align:center; margin-top:40px; font-size:12px; line-height:1.4;">
+        <p style="margin:0;">______________________________</p>
+        <p style="margin:4px 0 0 0;">Nombre</p>
+        <p style="margin:0;">Especialista de sostenibilidad contratista</p>
+        <p style="margin:0;">Matrícula No. ____________</p>
+    </div>
+
+    <div class="footer">
+        Documento generado — Sistema monitor de sostenibilidad<br>
+        © 2025 — Todos los derechos reservados
+    </div>
+
+</body>
+</html>
