@@ -153,7 +153,7 @@
         <h6 style="margin:2px 0;">MANUAL DE INTERVENTORÍA OBRA PÚBLICA</h6>
         <h6 style="margin:2px 0;">CÁLCULO DE EMISIONES</h6>
         <p>Subdirección de sostenibilidad<br>Monitor de sostenibilidad</p>
-        <p><strong>Fecha:</strong> 2025-11-18</p>
+        <p><strong>Fecha:</strong> {{ fecha_hora }}</p>
     </div>
 
     <div class="page-break"></div>
@@ -450,8 +450,7 @@
         <tr>
             <th>Departamento</th>
             <th>Municipio</th>
-            <th>Georreferenciación inicial</th>
-            <th>Georreferenciación final</th>
+            <th>Georreferenciación</th>
             <th>PR</th>
             <th>Nombre de la vía</th>
             <th>Nombre tramo</th>
@@ -463,7 +462,6 @@
             <td>{{ data.data.step_4.ubicacion.municipio }}</td>
             <td>{{ data.data.step_4.ubicacion.coordenada_inicial }}</td>
             <td>{{ data.data.step_4.ubicacion.coordenada_final }}</td>
-            <td>{{ data.data.step_4.ubicacion.departamento }}</td>
             <td>T{{ data.data.step_4.ubicacion.departamento }}</td>
             <td>{{ data.data.step_4.ubicacion.departamento }}</td>
             <td>{{ data.data.step_4.ubicacion.departamento }}</td>
@@ -482,10 +480,10 @@
             <th>Observaciones</th>
         </tr>
         <tr>
-            <td>Fluvial</td>
-            <td>Terciaria </td>
-            <td>Mejoramiento</td>
-            <td>N/A</td>
+            <td>{{ data.data.step_5.descripcion.modo }}</td>
+            <td>{{ data.data.step_5.descripcion.funcionalidad }} </td>
+            <td>{{ data.data.step_5.descripcion.categorizacion }}</td>
+            <td>{{ data.data.step_5.descripcion.observaciones }}</td>
         </tr>
     </table>
 
@@ -531,8 +529,8 @@
         </tr>
 
         <tr>
-            <td>Chocó</td>
-            <td>Quibdó</td>
+            <td>{{ emisiones[0].has_proposal }}</td>
+            <td>Quibdóxxx</td>
             <td>xxxxxx</td>
             <td>11111</td>
             <td>Troncal del Magdalena</td>
@@ -1028,3 +1026,46 @@
 
 </body>
 </html>
+
+
+
+
+
+<!-- boton flotante para descargar -->
+
+<!-- Botón flotante -->
+<!-- <button id="btnDescargar" title="Imprimir / Descargar"></button>
+
+<style>
+#btnDescargar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease-in-out;
+}
+
+#btnDescargar:hover {
+    transform: scale(1.1);
+}
+
+  /* Ícono de descarga (CSS puro) */
+#btnDescargar::before {
+    content: "⬇";
+    font-size: 24px;
+    color: white;
+}
+</style>
+
+<script>
+  document.getElementById("btnDescargar").addEventListener("click", function () {
+    window.print(); // Abre el panel de impresión / guardar como PDF
+  });
+</script> -->

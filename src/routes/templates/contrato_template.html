@@ -153,7 +153,7 @@
         <h6 style="margin:2px 0;">MANUAL DE INTERVENTORÍA OBRA PÚBLICA</h6>
         <h6 style="margin:2px 0;">CÁLCULO DE EMISIONES</h6>
         <p>Subdirección de sostenibilidad<br>Monitor de sostenibilidad</p>
-        <p><strong>Fecha:</strong> 2025-11-18</p>
+        <p><strong>Fecha:</strong> {{ fecha_hora }}</p>
     </div>
 
     <div class="page-break"></div>
@@ -248,10 +248,10 @@
             <th>No licenciado - paga</th>
         </tr>
         <tr>
-            <td>Licenciado</td>
-            <td>Licenciado</td>
-            <td>30-Junio-2025</td>
-            <td>$</td>
+            <td>{{ data.data.step_1.proyecto.tipo_proyecto }}</td>
+            <td>{{ data.data.step_1.proyecto.licenciado }}</td>
+            <td>{{ data.data.step_1.proyecto.resolucion_fecha }}</td>
+            <td>$ N/A</td>
         </tr>
     </table>
 
@@ -263,39 +263,39 @@
     <table>
         <tr>
             <th>NIT</th>
-            <td>12345678</td>
+            <td>{{ data.data.step_2.contratista.nit }}</td>
         </tr>
         <tr>
             <th>Nombre contratista</th>
-            <td>Carlos Delgado</td>
+            <td>{{ data.data.step_2.contratista.nombre }}</td>
         </tr>
         <tr>
             <th>Nombre del representante legal</th>
-            <td>Daniel Quiroga</td>
+            <td>{{ data.data.step_2.contratista.representante_legal }}</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>12345678</td>
+            <td>{{ data.data.step_2.contratista.representante_cedula }}</td>
         </tr>
         <tr>
             <th>Nombre del director de obra</th>
-            <td>Nairo Quintana</td>
+            <td>{{ data.data.step_2.contratista.director_obra }}</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>12345678</td>
+            <td>{{ data.data.step_2.contratista.director_cedula }}</td>
         </tr>
         <tr>
             <th>Dirección de la empresa</th>
-            <td>cra 6ta</td>
+            <td>{{ data.data.step_2.contratista.direccion }}</td>
         </tr>
         <tr>
             <th>Celular</th>
-            <td>32345678</td>
+            <td>{{ data.data.step_2.contratista.celular }}</td>
         </tr>
         <tr>
             <th>Correo electrónico</th>
-            <td>Prueba@gmail.com</td>
+            <td>{{ data.data.step_2.contratista.correo }}</td>
         </tr>
     </table>
 
@@ -306,47 +306,44 @@
     <table>
         <tr>
             <th>NIT</th>
-            <td>12345678</td>
+            <td>{{ data.data.step_2.interventoria.nit }}</td>
         </tr>
         <tr>
             <th>Nombre contratista</th>
-            <td>Carlos Delgado</td>
+            <td>{{ data.data.step_2.interventoria.nombre }}</td>
         </tr>
         <tr>
             <th>Nombre del representante legal</th>
-            <td>Daniel Quiroga</td>
+            <td>{{ data.data.step_2.interventoria.representante_legal }}</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>12345678</td>
+            <td>{{ data.data.step_2.interventoria.representante_cedula }}</td>
         </tr>
         <tr>
             <th>Nombre del director de obra</th>
-            <td>Nairo Quintana</td>
+            <td>{{ data.data.step_2.interventoria.director_obra }}</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>12345678</td>
+            <td>{{ data.data.step_2.interventoria.director_cedula }}</td>
         </tr>
         <tr>
             <th>Dirección de la empresa</th>
-            <td>cra 6ta</td>
+            <td>{{ data.data.step_2.interventoria.direccion }}</td>
         </tr>
         <tr>
             <th>Celular</th>
-            <td>32345678</td>
+            <td>{{ data.data.step_2.interventoria.celular }}</td>
         </tr>
         <tr>
             <th>Correo electrónico</th>
-            <td>Prueba@gmail.com</td>
+            <td>{{ data.data.step_2.interventoria.correo }}</td>
         </tr>
     </table>
 
     <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
     3.3. INVIAS- SOSTENIBILIDAD (Trimestrales) </h2>
-
-
-
 
     <table>
         <tr>
@@ -357,8 +354,8 @@
             <th>Correo electrónico</th>
         </tr>
         <tr>
-            <td>Anderson</td>
-            <td>Prueba@gmail.com</td>
+            <td>{{ data.data.step_2.invias.nombre }}</td>
+            <td>{{ data.data.step_2.invias.correo }}</td>
         </tr>
     </table>
 
@@ -374,13 +371,15 @@
             <th>Titulo</th>
             <th>Correo electrónico</th>
         </tr>
+        {% for esp in data.data.step_2.especialistas %}
         <tr>
-            <td>David Murcia</td>
-            <td>12345</td>
-            <td>Abogado</td>
-            <td>Analista</td>
-            <td>Prueba@gmail.com</td>
+            <td>{{ esp.nombre }}</td>
+            <td>{{ esp.cedula }}</td>
+            <td>{{ esp.cargo }}</td>
+            <td>{{ esp.titulo }}</td>
+            <td>{{ esp.correo }}</td>
         </tr>
+        {% endfor %}
     </table>
 
 <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
@@ -394,13 +393,15 @@
             <th>Titulo</th>
             <th>Correo electrónico</th>
         </tr>
+        {% for profesionales in data.data.step_2.profesionales %}
         <tr>
-            <td>David Murcia</td>
-            <td>12345</td>
-            <td>Abogado</td>
-            <td>Analista</td>
-            <td>Prueba@gmail.com</td>
+            <td>{{ profesionales.nombre }}</td>
+            <td>{{ profesionales.cedula }}</td>
+            <td>{{ profesionales.cargo }}</td>
+            <td>{{ profesionales.titulo }}</td>
+            <td>{{ profesionales.correo }}</td>
         </tr>
+        {% endfor %}
     </table>
 
 <h2>5. INFORMACIÓN PRESUPUESTAL</h2>
@@ -409,7 +410,7 @@
 <table>
         <tr>
             <th>Valor inicial  de obra</th>
-            <td>$ 1000000</td>
+            <td>$ {{ data.data.step_3.presupuesto.disponible }}</td>
         </tr>
         <tr>
             <th>Valor adicional de obra N°</th>
@@ -457,13 +458,13 @@
             <th>Porcentaje</th>
         </tr>
         <tr>
-            <td>Chocó</td>
-            <td>Quibdó</td>
-            <td>xxxxxx</td>
-            <td>11111</td>
-            <td>Troncal del Magdalena</td>
-            <td>Tramo 1</td>
-            <td>Suelo  rural </td>
+            <td>{{ data.data.step_4.ubicacion.departamento }}</td>
+            <td>{{ data.data.step_4.ubicacion.municipio }}</td>
+            <td>{{ data.data.step_4.ubicacion.coordenada_inicial }}</td>
+            <td>{{ data.data.step_4.ubicacion.coordenada_final }}</td>
+            <td>T{{ data.data.step_4.ubicacion.departamento }}</td>
+            <td>{{ data.data.step_4.ubicacion.departamento }}</td>
+            <td>{{ data.data.step_4.ubicacion.departamento }}</td>
             <td>100%</td>
         </tr>
     </table>
@@ -479,10 +480,10 @@
             <th>Observaciones</th>
         </tr>
         <tr>
-            <td>Fluvial</td>
-            <td>Terciaria </td>
-            <td>Mejoramiento</td>
-            <td>N/A</td>
+            <td>{{ data.data.step_5.descripcion.modo }}</td>
+            <td>{{ data.data.step_5.descripcion.funcionalidad }} </td>
+            <td>{{ data.data.step_5.descripcion.categorizacion }}</td>
+            <td>{{ data.data.step_5.descripcion.observaciones }}</td>
         </tr>
     </table>
 
@@ -528,8 +529,8 @@
         </tr>
 
         <tr>
-            <td>Chocó</td>
-            <td>Quibdó</td>
+            <td>{{ emisiones[0].has_proposal }}</td>
+            <td>Quibdóxxx</td>
             <td>xxxxxx</td>
             <td>11111</td>
             <td>Troncal del Magdalena</td>
@@ -1025,3 +1026,46 @@
 
 </body>
 </html>
+
+
+
+
+
+<!-- boton flotante para descargar -->
+
+<!-- Botón flotante -->
+<button id="btnDescargar" title="Imprimir / Descargar"></button>
+
+<style>
+#btnDescargar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease-in-out;
+}
+
+#btnDescargar:hover {
+    transform: scale(1.1);
+}
+
+  /* Ícono de descarga (CSS puro) */
+#btnDescargar::before {
+    content: "⬇";
+    font-size: 24px;
+    color: white;
+}
+</style>
+
+<script>
+  document.getElementById("btnDescargar").addEventListener("click", function () {
+    window.print(); // Abre el panel de impresión / guardar como PDF
+  });
+</script>

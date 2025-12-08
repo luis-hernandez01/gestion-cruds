@@ -29,26 +29,101 @@ async def contract_to_html(
 
     # Llamada al servicio externo
     external_url = "https://as-aikawayra-wayra-dev-b2-eastus.azurewebsites.net/form/by-contract-code"
+    url_emisiones = "https://as-aikawayra-wayra-dev-b2-eastus.azurewebsites.net/api/v1/emissions"
+    
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json, text/html"
+    }
 
     async with httpx.AsyncClient() as client:
+        # Servicio 1: Contrato
         resp = await client.get(
             external_url,
             params={"contract_code": contract_code},
-            headers={"Authorization": f"Bearer {token}"}
+            headers=headers
+        )
+    
+    if resp.status_code != 200:
+        return {
+            "error": "No se pudo obtener información del contrato",
+            "detalle": resp.text
+        }
+
+    
+    
+    
+    async with httpx.AsyncClient() as client:
+
+        # Servicio 1
+        resp = await client.get(
+            external_url,
+            params={"contract_code": contract_code},
+            headers=headers
         )
 
-    if resp.status_code != 200:
-        raise HTTPException(status_code=400, detail="No se encontró el contrato")
+        if resp.status_code != 200:
+            return {"error": "Error en servicio FORM", "detalle": resp.text}
 
-    # JSON del servicio
-    try:
-        service_data = resp.json()
-    except:
-        raise HTTPException(status_code=400, detail="El servicio no devolvió JSON válido")
+        # Procesar respuesta
+        content_type = resp.headers.get("content-type", "")
+        service_data = None
+        form_id = None
 
+        if "application/json" in content_type:
+            service_data = resp.json()
+            form_id = service_data.get("id")
+        else:
+            service_data = {"html": resp.text}
+
+        # Servicios 2: Emisiones DENTRO DEL MISMO BLOQUE
+        emisiones_data = {}
+
+        if form_id:
+            resp_emisiones = await client.get(
+                url_emisiones,
+                params={"form_id": form_id},
+                headers=headers
+            )
+
+            if resp_emisiones.status_code == 200:
+                try:
+                    emisiones_data = resp_emisiones.json()
+                except:
+                    emisiones_data = {}
+                    
+                    
+                    
+                    
+                    
+                    
+    from datetime import datetime
+    
+    meses = {
+        1: "enero", 2: "febrero", 3: "marzo", 4: "abril",
+        5: "mayo", 6: "junio", 7: "julio", 8: "agosto",
+        9: "septiembre", 10: "octubre", 11: "noviembre", 12: "diciembre"
+    }
+
+    dias = {
+        "Monday": "lunes", "Tuesday": "martes", "Wednesday": "miércoles",
+        "Thursday": "jueves", "Friday": "viernes", "Saturday": "sábado",
+        "Sunday": "domingo"
+    }
+
+    now = datetime.now()
+    dia = dias[now.strftime("%A")]
+    mes = meses[now.month]
+
+    fecha_es = f"{dia} {now.day} de {mes} del {now.year}"
+
+
+    fecha = datetime.now()
     # Renderizado con Jinja2
     html_renderizado = templates.get_template("contrato_template.html").render(
-        data=service_data
+        data=service_data,
+        emisiones=emisiones_data,
+        fecha_hora=fecha_es
     )
 
     # Guardar el HTML igual que upload-html
