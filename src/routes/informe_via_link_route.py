@@ -31,6 +31,10 @@ async def contract_to_html(
     external_url = "https://as-aikawayra-wayra-dev-b2-eastus.azurewebsites.net/form/by-contract-code"
     url_emisiones = "https://as-aikawayra-wayra-dev-b2-eastus.azurewebsites.net/api/v1/emissions"
     
+    url_quarterly = "https://as-aikawayra-wayra-dev-b2-eastus.azurewebsites.net/api/v1/quarterly-reports/"
+    
+    url_monthly = "https://as-aikawayra-wayra-dev-b2-eastus.azurewebsites.net/api/v1/monthly-reports/"
+    
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/json, text/html"
@@ -69,22 +73,64 @@ async def contract_to_html(
         content_type = resp.headers.get("content-type", "")
         service_data = None
         form_id = None
+        id = None
 
         if "application/json" in content_type:
             service_data = resp.json()
             form_id = service_data.get("id")
+            # id = service_data.get("id")
         else:
             service_data = {"html": resp.text}
 
         # Servicios 2: Emisiones DENTRO DEL MISMO BLOQUE
         emisiones_data = {}
+        quarterly_data = {}
+        monthly_data = {}
+        
+        # if id:
+        #     resp_quarterly = await client.get(
+        #         url_quarterly,
+        #         params={"id": id},
+        #         headers=headers
+        #     )
+            
+        #     if resp_quarterly.status_code == 200:
+        #         try:
+        #             quarterly_data = resp_quarterly.json()
+        #         except:
+        #             quarterly_data = {}
 
         if form_id:
+            resp_quarterly = await client.get(
+                url_quarterly,
+                params={"form_id": form_id},
+                headers=headers
+            )
+            
+            if resp_quarterly.status_code == 200:
+                try:
+                    quarterly_data = resp_quarterly.json()
+                except:
+                    quarterly_data = {}
+                    
+                    
             resp_emisiones = await client.get(
                 url_emisiones,
                 params={"form_id": form_id},
                 headers=headers
             )
+            
+            resp_monthly = await client.get(
+                url_monthly,
+                params={"form_id": form_id},
+                headers=headers
+            )
+            
+            if resp_monthly.status_code == 200:
+                try:
+                    monthly_data = resp_monthly.json()
+                except:
+                    monthly_data = {}
 
             if resp_emisiones.status_code == 200:
                 try:
@@ -94,7 +140,7 @@ async def contract_to_html(
                     
                     
                     
-                    
+        
                     
                     
     from datetime import datetime
@@ -123,6 +169,8 @@ async def contract_to_html(
     html_renderizado = templates.get_template("contrato_template.html").render(
         data=service_data,
         emisiones=emisiones_data,
+        monthly=monthly_data,
+        quarterly=quarterly_data,
         fecha_hora=fecha_es
     )
 

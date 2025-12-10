@@ -17,18 +17,19 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/{schema}/all")
-def list_all(schema: str, 
+@router.get("/{schema}/tipologia/all")
+def list_all(schema: Optional[str], request: Request, 
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     return Tipologia_proyectoService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/{schema}/", response_model=PaginacionSchema)
-def lista(schema: str, 
+@router.get("/{schema}/tipologia/", response_model=PaginacionSchema)
+def lista(schema: Optional[str],  request: Request,
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -40,6 +41,7 @@ def lista(schema: str,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ) -> Dict[str, Any]:
+    schema = request.state.schema
     skip = (page - 1) * per_page
     limit = per_page
     data = Tipologia_proyectoService(db, schema).listar(activo=activo, filtros=filtros,
@@ -60,29 +62,31 @@ def lista(schema: str,
     # endpoin de crear registro
 
 
-@router.post("/{schema}/")
-def creates(schema: str, 
+@router.post("/{schema}/tipologia/")
+def creates(schema: Optional[str], 
     request: Request,
     payload: Tipologia_proyectoCreate,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = Tipologia_proyectoService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{schema}/{tipologia_id}")
-def get_show(schema: str, tipologia_id: int, 
+@router.get("/{schema}/tipologia/{tipologia_id}")
+def get_show(schema: Optional[str], request: Request, tipologia_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     return Tipologia_proyectoService(db, schema).show(tipologia_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{schema}/{tipologia_id}")
-def update(schema: str, 
+@router.put("/{schema}/tipologia/{tipologia_id}")
+def update(schema: Optional[str], 
     request: Request,
     tipologia_id: int,
     payload: Tipologia_proyectoUpdate,
@@ -90,29 +94,32 @@ def update(schema: str,
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = Tipologia_proyectoService(db, schema).updates(tipologia_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{schema}/{tipologia_id}")
-def delete(schema: str, 
+@router.delete("/{schema}/tipologia/{tipologia_id}")
+def delete(schema: Optional[str], 
     request: Request,
     tipologia_id: int,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = Tipologia_proyectoService(db, schema).deletes(tipologia_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{schema}/{tipologia_id}/reactivate")
-def reactivates(schema: str, request: Request, 
+@router.post("/{schema}/tipologia/{tipologia_id}/reactivate")
+def reactivates(schema: Optional[str], request: Request, 
                         tipologia_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = Tipologia_proyectoService(db, schema).reactivate(tipologia_id, request, tokenpayload)
     return {"data": result}

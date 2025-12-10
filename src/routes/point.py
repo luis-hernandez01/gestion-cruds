@@ -1,23 +1,24 @@
 """
 Endpoints de API para análisis de puntos
 """
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from src.config.config import (get_db)
 from src.models.schemas import PointCoordinates, APIResponse
 from src.services.point_service import point_service
 from src.utils.jwt_validator_util import verify_jwt_token
+from typing import Optional
+router = APIRouter( tags=["Point Analysis"])
 
-router = APIRouter(prefix="/api/point", tags=["Point Analysis"])
 
-
-@router.post("/{schema}/analyze", response_model=APIResponse)
+@router.post("/{schema}/api/point/analyze", response_model=APIResponse)
 async def analyze_point(
-    schema: str, 
+    schema: Optional[str], request: Request,
     point_data: PointCoordinates,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     """
     Analiza un punto y retorna el municipio y departamento donde se encuentra
     

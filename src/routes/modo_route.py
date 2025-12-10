@@ -12,19 +12,20 @@ from src.utils.jwt_validator_util import verify_jwt_token
 # inicializacion del roter
 router = APIRouter()
 
-@router.get("/{schema}/all")
-def list_all(schema: str, 
+@router.get("/{schema}/modo/all")
+def list_all(schema: Optional[str],  request: Request,
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     return ModoService(db, schema).all()
 
 
 
 # endpoint de listar data con paginacion incluida
-@router.get("/{schema}/", response_model=PaginacionSchema)
-def lista(schema: str, 
+@router.get("/{schema}/modo/", response_model=PaginacionSchema)
+def lista(schema: Optional[str],  request: Request,
     page: int = Query(1, ge=1),
     per_page: int = Query(50, ge=1, le=200),
     activo: Optional[bool] = Query(True, description="Filtrar por estado activo (true o false)"),
@@ -36,6 +37,7 @@ def lista(schema: str,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token)
 ) -> Dict[str, Any]:
+    schema = request.state.schema
     skip = (page - 1) * per_page
     limit = per_page
     data = ModoService(db, schema).list_modo(activo=activo, filtros=filtros, skip=skip, limit=limit)
@@ -53,52 +55,57 @@ def lista(schema: str,
     }
     
     # endpoin de crear registro
-@router.post("/{schema}/")
-def creates(schema: str, request: Request, 
+@router.post("/{schema}/modo/")
+def creates(schema: Optional[str], request: Request, 
                         payload: ModoCreate, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ModoService(db, schema).create_modo(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{schema}/{modo_id}")
-def get_show(schema: str, modo_id: int, 
+@router.get("/{schema}/modo/{modo_id}")
+def get_show(schema: Optional[str], request: Request, modo_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     return ModoService(db, schema).show(modo_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{schema}/{modo_id}")
-def update(schema: str, request: Request, 
+@router.put("/{schema}/modo/{modo_id}")
+def update(schema: Optional[str], request: Request, 
                         modo_id: int,
                         payload: ModoUpdate,
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ModoService(db, schema).update_modo(modo_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{schema}/{modo_id}")
-def delete(schema: str, request: Request, 
+@router.delete("/{schema}/modo/{modo_id}")
+def delete(schema: Optional[str], request: Request, 
                         modo_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ModoService(db, schema).delete_modo(modo_id, request, tokenpayload)
     return {"data": result}
 
 
-@router.post("/{schema}/{modo_id}/reactivate")
-def reactivates(schema: str, request: Request, 
+@router.post("/{schema}/modo/{modo_id}/reactivate")
+def reactivates(schema: Optional[str], request: Request, 
                         modo_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ModoService(db, schema).reactivate(modo_id, request, tokenpayload)
     return {"data": result}

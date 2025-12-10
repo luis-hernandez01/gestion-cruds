@@ -1,21 +1,23 @@
 """
 Endpoints de API para análisis de polígonos
 """
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from src.config.config import (get_db)
 from src.models.schemas import PolygonCoordinates, APIResponse
 from src.services.polygon_service import polygon_service
 from src.utils.jwt_validator_util import verify_jwt_token
-router = APIRouter(prefix="/api/polygon", tags=["Polygon Analysis"])
+from typing import Optional
+router = APIRouter( tags=["Polygon Analysis"])
 
 
-@router.post("/{schema}/analyze", response_model=APIResponse)
-async def analyze_polygon(schema: str, 
+@router.post("/{schema}/api/polygon/analyze", response_model=APIResponse)
+async def analyze_polygon(schema: Optional[str], request: Request,
     polygon_data: PolygonCoordinates,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     """
     Analiza un polígono y retorna los municipios y departamentos que intersecta
     

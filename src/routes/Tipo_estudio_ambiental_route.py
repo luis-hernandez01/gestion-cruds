@@ -17,18 +17,19 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/{schema}/all")
-def list_all(schema: str, 
+@router.get("/{schema}/tipo_estudio_ambiental/all")
+def list_all(schema: Optional[str],  request: Request,
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     return Tipo_estudioService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/{schema}/", response_model=PaginacionSchema)
-def lista(schema: str, 
+@router.get("/{schema}/tipo_estudio_ambiental/", response_model=PaginacionSchema)
+def lista(schema: Optional[str],  request: Request,
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -40,6 +41,7 @@ def lista(schema: str,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ) -> Dict[str, Any]:
+    schema = request.state.schema
     skip = (page - 1) * per_page
     limit = per_page
     data = Tipo_estudioService(db, schema).listar(activo=activo, filtros=filtros,
@@ -60,29 +62,31 @@ def lista(schema: str,
     # endpoin de crear registro
 
 
-@router.post("/{schema}/")
-def creates(schema: str, 
+@router.post("/{schema}/tipo_estudio_ambiental/")
+def creates(schema: Optional[str], 
     request: Request,
     payload: Tipo_estudio_ambientalCreate,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = Tipo_estudioService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{schema}/{tipo_estudio_id}")
-def get_show(schema: str, tipo_estudio_id: int, 
+@router.get("/{schema}/tipo_estudio_ambiental/{tipo_estudio_id}")
+def get_show(schema: Optional[str], request: Request, tipo_estudio_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     return Tipo_estudioService(db, schema).show(tipo_estudio_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{schema}/{tipo_estudio_id}")
-def update(schema: str, 
+@router.put("/{schema}/tipo_estudio_ambiental/{tipo_estudio_id}")
+def update(schema: Optional[str], 
     request: Request,
     tipo_estudio_id: int,
     payload: Tipo_estudio_ambientalUpdate,
@@ -90,29 +94,32 @@ def update(schema: str,
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = Tipo_estudioService(db, schema).updates(tipo_estudio_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{schema}/{tipo_estudio_id}")
-def delete(schema: str, 
+@router.delete("/{schema}/tipo_estudio_ambiental/{tipo_estudio_id}")
+def delete(schema: Optional[str], 
     request: Request,
     tipo_estudio_id: int,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = Tipo_estudioService(db, schema).deletes(tipo_estudio_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{schema}/{tipo_estudio_id}/reactivate")
-def reactivates(schema: str, request: Request, 
+@router.post("/{schema}/tipo_estudio_ambiental/{tipo_estudio_id}/reactivate")
+def reactivates(schema: Optional[str], request: Request, 
                         tipo_estudio_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = Tipo_estudioService(db, schema).reactivate(tipo_estudio_id, request, tokenpayload)
     return {"data": result}

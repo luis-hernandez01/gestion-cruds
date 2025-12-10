@@ -12,18 +12,22 @@ from src.utils.jwt_validator_util import verify_jwt_token
 # inicializacion del roter
 router = APIRouter()
 
-@router.get("/{schema}/all")
-def list_all(schema: str, 
+@router.get("/{schema}/actividades/all")
+def list_all( request: Request,
+    schema: Optional[str],
+    
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
+    
     return ActividadeService(db, schema).all()
 
 
 # endpoint de listar data con paginacion incluida
-@router.get("/{schema}/", response_model=PaginacionSchema)
-def lista(schema: str, 
+@router.get("/{schema}/actividades/", response_model=PaginacionSchema)
+def lista(schema: Optional[str], request: Request, 
     page: int = Query(1, ge=1),
     per_page: int = Query(50, ge=1, le=200),
     activo: Optional[bool] = Query(True, description="Filtrar por estado activo (true o false)"),
@@ -35,6 +39,7 @@ def lista(schema: str,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token)
 ) -> Dict[str, Any]:
+    schema = request.state.schema
     skip = (page - 1) * per_page
     limit = per_page
     data = ActividadeService(db, schema).listar(activo=activo, filtros=filtros, skip=skip, limit=limit)
@@ -52,52 +57,57 @@ def lista(schema: str,
     }
     
     # endpoin de crear registro
-@router.post("/{schema}/")
-def creates(schema: str, request: Request, 
+@router.post("/{schema}/actividades/")
+def creates(schema: Optional[str], request: Request, 
                         payload: ActividadCreate, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ActividadeService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{schema}/{actividad_id}")
-def get_show(schema: str, actividad_id: int, 
+@router.get("/{schema}/actividades/{actividad_id}")
+def get_show(schema: Optional[str], request: Request, actividad_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     return ActividadeService(db, schema).show(actividad_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{schema}/{actividad_id}")
-def update(schema: str, request: Request, 
+@router.put("/{schema}/actividades/{actividad_id}")
+def update(schema: Optional[str], request: Request, 
                         actividad_id: int,
                         payload: ActividadUpdate,
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ActividadeService(db, schema).updates(actividad_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{schema}/{actividad_id}")
-def delete(schema: str, request: Request, 
+@router.delete("/{schema}/actividades/{actividad_id}")
+def delete(schema: Optional[str], request: Request, 
                         actividad_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ActividadeService(db, schema).deletes(actividad_id, request, tokenpayload)
     return {"data": result}
 
 
-@router.post("/{schema}/{actividad_id}/reactivate")
-def reactivates(schema: str, request: Request, 
+@router.post("/{schema}/actividades/{actividad_id}/reactivate")
+def reactivates(schema: Optional[str], request: Request, 
                         actividad_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = ActividadeService(db, schema).reactivate(actividad_id, request, tokenpayload)
     return {"data": result}

@@ -153,7 +153,7 @@
         <h6 style="margin:2px 0;">MANUAL DE INTERVENTORÍA OBRA PÚBLICA</h6>
         <h6 style="margin:2px 0;">CÁLCULO DE EMISIONES</h6>
         <p>Subdirección de sostenibilidad<br>Monitor de emisiones</p>
-        <p><strong>Fecha:</strong> {{ fecha_hora }}</p>
+        <p><strong>Fecha:</strong> martes 9 de diciembre del 2025</p>
     </div>
 
     <div class="page-break"></div>
@@ -196,19 +196,19 @@
     <table>
         <tr>
             <th>Unidad ejecutora</th>
-            <td>{{ data.data.step_1.proyecto.unidad_ejecutora }}</td>
+            <td>Subdirección de Gestión del Riesgo</td>
         </tr>
         <tr>
             <th>Dirección territorial</th>
-            <td>{{ data.data.step_1.proyecto.direccion_territorial }}</td>
+            <td>Dirección Territorial Bolívar</td>
         </tr>
         <tr>
             <th>Contrato de obra N°</th>
-            <td>{{ data.data.step_1.proyecto.contratos.obra.numero }}</td>
+            <td>03-12-2025</td>
         </tr>
         <tr>
             <th>Contrato de interventoría N°</th>
-            <td>{{ data.data.step_1.proyecto.contratos.interventoria.numero }}</td>
+            <td>CO-931237</td>
         </tr>
     </table>
 
@@ -220,14 +220,35 @@
             <th>Al</th>
             <th>Mensual</th>
         </tr>
-        {% for trinestre in quarterly %}
+        
         <tr>
-            <td>{{ trinestre.quarter }}</td>
-            <td>{{ trinestre.period_start }}</td>
-            <td>{{ trinestre.period_end }}</td>
-            <td>{{ trinestre.quarter }}</td>
+            <td>4</td>
+            <td>2026-09</td>
+            <td>2026-11</td>
+            <td>4</td>
         </tr>
-        {% endfor %}
+        
+        <tr>
+            <td>3</td>
+            <td>2026-06</td>
+            <td>2026-08</td>
+            <td>3</td>
+        </tr>
+        
+        <tr>
+            <td>2</td>
+            <td>2026-03</td>
+            <td>2026-05</td>
+            <td>2</td>
+        </tr>
+        
+        <tr>
+            <td>1</td>
+            <td>2025-12</td>
+            <td>2026-02</td>
+            <td>1</td>
+        </tr>
+        
     </table>
 
     <table>
@@ -237,7 +258,7 @@
         <tr>
             <td colspan="100%">
                 <p style="text-align: justify;">
-                    {{ data.data.step_1.proyecto.objeto }}
+                    Convenio de obra
                 </p>
             </td>
         </tr>
@@ -250,9 +271,9 @@
             <th>No licenciado - paga</th>
         </tr>
         <tr>
-            <td>{{ data.data.step_1.proyecto.tipo_proyecto }}</td>
-            <td>{{ data.data.step_1.proyecto.licenciado }}</td>
-            <td>{{ data.data.step_1.proyecto.resolucion_fecha }}</td>
+            <td></td>
+            <td>True</td>
+            <td>01/12/2025</td>
             <td>$ N/A</td>
         </tr>
     </table>
@@ -265,39 +286,39 @@
     <table>
         <tr>
             <th>NIT</th>
-            <td>{{ data.data.step_2.contratista.nit }}</td>
+            <td>921127-01</td>
         </tr>
         <tr>
             <th>Nombre contratista</th>
-            <td>{{ data.data.step_2.contratista.nombre }}</td>
+            <td>Anthony Martinez</td>
         </tr>
         <tr>
             <th>Nombre del representante legal</th>
-            <td>{{ data.data.step_2.contratista.representante_legal }}</td>
+            <td>Anthony Martinez</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>{{ data.data.step_2.contratista.representante_cedula }}</td>
+            <td>1143438214</td>
         </tr>
         <tr>
             <th>Nombre del director de obra</th>
-            <td>{{ data.data.step_2.contratista.director_obra }}</td>
+            <td>Luis Cholo</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>{{ data.data.step_2.contratista.director_cedula }}</td>
+            <td>9012123221</td>
         </tr>
         <tr>
             <th>Dirección de la empresa</th>
-            <td>{{ data.data.step_2.contratista.direccion }}</td>
+            <td>Diagonal 107 Sur # 44 - 27</td>
         </tr>
         <tr>
             <th>Celular</th>
-            <td>{{ data.data.step_2.contratista.celular }}</td>
+            <td>310 567 20 20</td>
         </tr>
         <tr>
             <th>Correo electrónico</th>
-            <td>{{ data.data.step_2.contratista.correo }}</td>
+            <td>anthony@email.com</td>
         </tr>
     </table>
 
@@ -308,39 +329,39 @@
     <table>
         <tr>
             <th>NIT</th>
-            <td>{{ data.data.step_2.interventoria.nit }}</td>
+            <td>12345678</td>
         </tr>
         <tr>
             <th>Nombre contratista</th>
-            <td>{{ data.data.step_2.interventoria.nombre }}</td>
+            <td>Luis Hernandez</td>
         </tr>
         <tr>
             <th>Nombre del representante legal</th>
-            <td>{{ data.data.step_2.interventoria.representante_legal }}</td>
+            <td>Carlos Moreno</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>{{ data.data.step_2.interventoria.representante_cedula }}</td>
+            <td>12344321</td>
         </tr>
         <tr>
             <th>Nombre del director de obra</th>
-            <td>{{ data.data.step_2.interventoria.director_obra }}</td>
+            <td>Antony Amel</td>
         </tr>
         <tr>
             <th>Cedula</th>
-            <td>{{ data.data.step_2.interventoria.director_cedula }}</td>
+            <td>12332123</td>
         </tr>
         <tr>
             <th>Dirección de la empresa</th>
-            <td>{{ data.data.step_2.interventoria.direccion }}</td>
+            <td>Calle 1</td>
         </tr>
         <tr>
             <th>Celular</th>
-            <td>{{ data.data.step_2.interventoria.celular }}</td>
+            <td>321 233 32</td>
         </tr>
         <tr>
             <th>Correo electrónico</th>
-            <td>{{ data.data.step_2.interventoria.correo }}</td>
+            <td>carlos@gmail.com</td>
         </tr>
     </table>
 
@@ -356,8 +377,8 @@
             <th>Correo electrónico</th>
         </tr>
         <tr>
-            <td>{{ data.data.step_2.invias.nombre }}</td>
-            <td>{{ data.data.step_2.invias.correo }}</td>
+            <td>None</td>
+            <td>None</td>
         </tr>
     </table>
 
@@ -373,15 +394,15 @@
             <th>Titulo</th>
             <th>Correo electrónico</th>
         </tr>
-        {% for esp in data.data.step_2.especialistas %}
+        
         <tr>
-            <td>{{ esp.nombre }}</td>
-            <td>{{ esp.cedula }}</td>
-            <td>{{ esp.cargo }}</td>
-            <td>{{ esp.titulo }}</td>
-            <td>{{ esp.correo }}</td>
+            <td>diego Alvarez</td>
+            <td>45677765</td>
+            <td>Abogado</td>
+            <td>Administrador Agropecuario</td>
+            <td>diego@gmail.com</td>
         </tr>
-        {% endfor %}
+        
     </table>
 
 <h2 style="margin: 4px 0 10px; font-size: 18px; color:#444; font-weight:600;">
@@ -395,15 +416,15 @@
             <th>Titulo</th>
             <th>Correo electrónico</th>
         </tr>
-        {% for profesionales in data.data.step_2.profesionales %}
+        
         <tr>
-            <td>{{ profesionales.nombre }}</td>
-            <td>{{ profesionales.cedula }}</td>
-            <td>{{ profesionales.cargo }}</td>
-            <td>{{ profesionales.titulo }}</td>
-            <td>{{ profesionales.correo }}</td>
+            <td>Miguel moreno</td>
+            <td>737377474</td>
+            <td>Analista</td>
+            <td>Administrador de Empresas</td>
+            <td>miguel@gmail.com</td>
         </tr>
-        {% endfor %}
+        
     </table>
 
 <h2>5. INFORMACIÓN PRESUPUESTAL</h2>
@@ -412,7 +433,7 @@
 <table>
         <tr>
             <th>Valor inicial  de obra</th>
-            <td>$ {{ data.data.step_3.presupuesto.disponible }}</td>
+            <td>$ 1200000000</td>
         </tr>
         <tr>
             <th>Valor adicional de obra N°</th>
@@ -460,13 +481,13 @@
             <th>Porcentaje</th>
         </tr>
         <tr>
-            <td>{{ data.data.step_4.ubicacion.departamento }}</td>
-            <td>{{ data.data.step_4.ubicacion.municipio }}</td>
-            <td>{{ data.data.step_4.ubicacion.coordenada_inicial }}</td>
-            <td>{{ data.data.step_4.ubicacion.coordenada_final }}</td>
-            <td>T{{ data.data.step_4.ubicacion.departamento }}</td>
-            <td>{{ data.data.step_4.ubicacion.departamento }}</td>
-            <td>{{ data.data.step_4.ubicacion.departamento }}</td>
+            <td>ARCHIPIÉLAGO DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA</td>
+            <td>SAN ANDRÉS</td>
+            <td>4.105712, -75.324376</td>
+            <td>3.612450, -76.379382</td>
+            <td>TARCHIPIÉLAGO DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA</td>
+            <td>ARCHIPIÉLAGO DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA</td>
+            <td>ARCHIPIÉLAGO DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA</td>
             <td>100%</td>
         </tr>
     </table>
@@ -482,10 +503,10 @@
             <th>Observaciones</th>
         </tr>
         <tr>
-            <td>{{ data.data.step_5.descripcion.modo }}</td>
-            <td>{{ data.data.step_5.descripcion.funcionalidad }} </td>
-            <td>{{ data.data.step_5.descripcion.categorizacion }}</td>
-            <td>{{ data.data.step_5.descripcion.observaciones }}</td>
+            <td>Carretero</td>
+            <td>secundaria </td>
+            <td>mantenimiento</td>
+            <td>Comentario</td>
         </tr>
     </table>
 
@@ -530,36 +551,114 @@
             <th>CH4(kg)</th>
         </tr>
 
-    {% for vehiculo in emisiones %}
-        {% if vehiculo.source_subtype_id == 1 %}
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
         <tr>
-            <td>{{ vehiculo.has_proposal }}</td>
-            <td>{{ vehiculo.proposal_description }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.vehicle_category_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_factor_n2o }}</td>
-            <td>{{ vehiculo.conventional_factor_co2 }}</td>
-            <td>{{ vehiculo.conventional_factor_ch4 }}</td>
+            <td>True</td>
+            <td>Durante el periodo el 14% de los vehículos utilizados cuentan con tecnología Euro IV. (CATEGORÍA C2 MEDIANO UPME - UdeA)
+</td>
+            <td>2</td>
+            <td>3</td>
+            <td>2</td>
+            <td>81.0000000000</td>
+            <td>2.98258e-06</td>
+            <td>10.1489917732825</td>
+            <td>3.16899e-06</td>
 
-            <td>{{ vehiculo.cef_n20 }}</td>
-            <td>{{ vehiculo.cef_co2 }}</td>
-            <td>{{ vehiculo.cef_ch4 }}</td>
-            <td>{{ vehiculo.factors_unit }}</td>
-            <td>{{ vehiculo.proposal_emissions }}</td>
-            <td>{{ vehiculo.proposal_performance }}</td>
-            <td>{{ vehiculo.observations }}</td>
-            <td>{{ vehiculo.proposal_factor_n2o }}</td>
+            <td>0.0045901906</td>
+            <td>822.0683336359</td>
+            <td>0.0048770756</td>
+            <td>Kg/gal</td>
+            <td>46.4880894300</td>
+            <td>19.0000000000</td>
+            <td></td>
+            <td>0.000133</td>
 
-            <td>{{ vehiculo.proposal_factor_co2 }}</td>
-            <td>{{ vehiculo.proposal_factor_ch4 }}</td>
-            <td>{{ vehiculo.pef_n20 }}</td>
-            <td>{{ vehiculo.pef_co2 }}</td>
-            <td>{{ vehiculo.pef_ch4 }}</td>
+            <td>0.5714</td>
+            <td>1.578947368421053</td>
+            <td>0.2046870000</td>
+            <td>46.2834000000</td>
+            <td>0.0000024300</td>
         </tr>
-        {% endif %}
-    {% endfor %}
+        
+    
+        
+        <tr>
+            <td>True</td>
+            <td>&#34;Durante el periodo el 57% de los vehículos utilizados cuentan con tecnología Euro 3.  (CATEGORÍA TRACTO C3S3 UPME - UdeA)
+&#34;
+</td>
+            <td>2</td>
+            <td>3</td>
+            <td>2</td>
+            <td>3521.0000000000</td>
+            <td>2.98258e-06</td>
+            <td>10.1489917732825</td>
+            <td>3.16899e-06</td>
+
+            <td>0.1785282911</td>
+            <td>35734.6000337277</td>
+            <td>0.1896862344</td>
+            <td>Kg/gal</td>
+            <td>417.1124900999</td>
+            <td>17.0000000000</td>
+            <td>Calculos comparados con Excel
+</td>
+            <td>0.000996</td>
+
+            <td>0.101529412</td>
+            <td>1.647e-07</td>
+            <td>59.6175720000</td>
+            <td>357.4850596520</td>
+            <td>0.0098584479</td>
+        </tr>
+        
+    
+        
+        <tr>
+            <td>False</td>
+            <td></td>
+            <td>2</td>
+            <td>1</td>
+            <td>2</td>
+            <td>193.0000000000</td>
+            <td>6.21371e-07</td>
+            <td>10.1489917732825</td>
+            <td>3.10686e-07</td>
+
+            <td>0.0036457079</td>
+            <td>1958.7554122435</td>
+            <td>0.0018228569</td>
+            <td>Kg/gal</td>
+            <td>1958.7608808084</td>
+            <td>30.4000000000</td>
+            <td></td>
+            <td>6.21371e-07</td>
+
+            <td>10.1489917732825</td>
+            <td>3.10686e-07</td>
+            <td>0.0036457079</td>
+            <td>1958.7554122435</td>
+            <td>0.0018228569</td>
+        </tr>
+        
+    
     </table>
 <!-- </div> -->
 
@@ -603,35 +702,82 @@
         </tr>
 
 
-    {% for vehiculo in emisiones %}
-        {% if vehiculo.source_subtype_id == 2 %}
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
         <tr>
-            <td>{{ vehiculo.has_proposal }}</td>
-            <td>{{ vehiculo.proposal_description }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.vehicle_category_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_factor_n2o }}</td>
-            <td>{{ vehiculo.conventional_factor_co2 }}</td>
-            <td>{{ vehiculo.conventional_factor_ch4 }}</td>
+            <td>False</td>
+            <td></td>
+            <td>2</td>
+            <td>None</td>
+            <td>2</td>
+            <td>8.0000000000</td>
+            <td>0.0224063460191466</td>
+            <td>10.1489917732825</td>
+            <td>0.00381646553073376</td>
 
-            <td>{{ vehiculo.cef_n20 }}</td>
-            <td>{{ vehiculo.cef_co2 }}</td>
-            <td>{{ vehiculo.cef_ch4 }}</td>
-            <td>{{ vehiculo.factors_unit }}</td>
+            <td>0.1792507682</td>
+            <td>81.1919341863</td>
+            <td>0.0305317242</td>
+            <td>Kg/gal</td>
             
-            <td>{{ vehiculo.observations }}</td>
-            <td>{{ vehiculo.proposal_factor_n2o }}</td>
+            <td></td>
+            <td>0.0224063460191466</td>
 
-            <td>{{ vehiculo.proposal_factor_co2 }}</td>
-            <td>{{ vehiculo.proposal_factor_ch4 }}</td>
-            <td>{{ vehiculo.pef_n20 }}</td>
-            <td>{{ vehiculo.pef_co2 }}</td>
-            <td>{{ vehiculo.pef_ch4 }}</td>
+            <td>10.1489917732825</td>
+            <td>0.00381646553073376</td>
+            <td>0.1792507682</td>
+            <td>81.1919341863</td>
+            <td>0.0305317242</td>
         </tr>
-        {% endif %}
-    {% endfor %}
+        
+    
+        
+        <tr>
+            <td>True</td>
+            <td>Durante el periodo el 90% de la maquinaría cuenta con tecnología TIER (10% TIER 2, 50% TIER 3, 10% TIER 4I y 20% TIER 4 final).
+</td>
+            <td>2</td>
+            <td>None</td>
+            <td>2</td>
+            <td>287.0000000000</td>
+            <td>0.0224063460191466</td>
+            <td>10.1489917732825</td>
+            <td>0.00381646553073376</td>
+
+            <td>6.4306213075</td>
+            <td>2912.7606389321</td>
+            <td>1.0953256073</td>
+            <td>Kg/gal</td>
+            
+            <td></td>
+            <td>0.022406346</td>
+
+            <td>10.14899177</td>
+            <td>0.003816466</td>
+            <td>0.0000000000</td>
+            <td>2870.0000000000</td>
+            <td>0.0000000000</td>
+        </tr>
+        
+    
+        
+    
+        
+    
+        
+    
     </table>
 <!-- </div> -->
 
@@ -674,36 +820,111 @@
             <th>CH4(kg)</th>
         </tr>
 
-        {% for vehiculo in emisiones %}
-        {% if vehiculo.source_subtype_id == 4 %}
+        
+        
         <tr>
-            <td>{{ vehiculo.vehicle_category_id }}</td>
-            <td>{{ vehiculo.has_proposal  }}</td>
-            <td>{{ vehiculo.proposal_description  }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_factor_n2o }}</td>
-            <td>{{ vehiculo.conventional_factor_co2 }}</td>
-            <td>{{ vehiculo.conventional_factor_ch4 }}</td>
+            <td>None</td>
+            <td>False</td>
+            <td></td>
+            <td>120.0000000000</td>
+            <td>None</td>
+            <td>120.0000000000</td>
+            <td>120.0000000000</td>
+            <td>0.0</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.cef_n20 }}</td>
-            <td>{{ vehiculo.cef_co2 }}</td>
-            <td>{{ vehiculo.cef_ch4 }}</td>
-            <td>{{ vehiculo.factors_unit }}</td>
+            <td>0.0000000000</td>
+            <td>18.0711252000</td>
+            <td>0.0000000000</td>
+            <td>Kg/gal</td>
             
-            <td>{{ vehiculo.observations }}</td>
-            <td>{{ vehiculo.proposal_factor_n2o }}</td>
+            <td></td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.proposal_factor_co2 }}</td>
-            <td>{{ vehiculo.proposal_factor_ch4 }}</td>
-            <td>{{ vehiculo.pef_n20 }}</td>
-            <td>{{ vehiculo.pef_co2 }}</td>
-            <td>{{ vehiculo.pef_ch4 }}</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>18.0711252000</td>
+            <td>0.0000000000</td>
         </tr>
-        {% endif %}
-    {% endfor %}
+        
+    
+        
+    
+        
+    
+        
+        <tr>
+            <td>None</td>
+            <td>False</td>
+            <td></td>
+            <td>52.3200000000</td>
+            <td>None</td>
+            <td>52.3200000000</td>
+            <td>52.3200000000</td>
+            <td>0.0</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
+
+            <td>0.0000000000</td>
+            <td>7.8790105872</td>
+            <td>0.0000000000</td>
+            <td>Kg/gal</td>
+            
+            <td></td>
+            <td>0.0</td>
+
+            <td>0.15059271</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>7.8790105872</td>
+            <td>0.0000000000</td>
+        </tr>
+        
+    
+        
+    
+        
+        <tr>
+            <td>None</td>
+            <td>True</td>
+            <td>Disminución de cantidad de portátiles usados
+</td>
+            <td>12.3200000000</td>
+            <td>None</td>
+            <td>12.3200000000</td>
+            <td>12.3200000000</td>
+            <td>0.0</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
+
+            <td>0.0000000000</td>
+            <td>1.8553021872</td>
+            <td>0.0000000000</td>
+            <td>Kg/Kwh</td>
+            
+            <td></td>
+            <td>0.0</td>
+
+            <td>0.177</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>1.3876800000</td>
+            <td>0.0000000000</td>
+        </tr>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
     </table>
 <!-- </div> -->
 
@@ -743,36 +964,56 @@
             <th>CH4(kg)</th>
         </tr>
 
-        {% for vehiculo in emisiones %}
-        {% if vehiculo.source_subtype_id == 3 %}
+        
+        
+    
+        
+    
+        
         <tr>
-            <td>{{ vehiculo.vehicle_category_id }}</td>
-            <td>{{ vehiculo.has_proposal  }}</td>
-            <td>{{ vehiculo.proposal_description  }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_factor_n2o }}</td>
-            <td>{{ vehiculo.conventional_factor_co2 }}</td>
-            <td>{{ vehiculo.conventional_factor_ch4 }}</td>
+            <td>None</td>
+            <td>False</td>
+            <td></td>
+            <td>79.0000000000</td>
+            <td>1</td>
+            <td>79.0000000000</td>
+            <td>79.0000000000</td>
+            <td>0.0</td>
+            <td>8.80847</td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.cef_n20 }}</td>
-            <td>{{ vehiculo.cef_co2 }}</td>
-            <td>{{ vehiculo.cef_ch4 }}</td>
-            <td>{{ vehiculo.factors_unit }}</td>
+            <td>0.0000000000</td>
+            <td>695.8691300000</td>
+            <td>0.0000000000</td>
+            <td>Kg/gal</td>
             
-            <td>{{ vehiculo.observations }}</td>
-            <td>{{ vehiculo.proposal_factor_n2o }}</td>
+            <td></td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.proposal_factor_co2 }}</td>
-            <td>{{ vehiculo.proposal_factor_ch4 }}</td>
-            <td>{{ vehiculo.pef_n20 }}</td>
-            <td>{{ vehiculo.pef_co2 }}</td>
-            <td>{{ vehiculo.pef_ch4 }}</td>
+            <td>8.80847</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>695.8691300000</td>
+            <td>0.0000000000</td>
         </tr>
-        {% endif %}
-    {% endfor %}
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
     </table>
 <!-- </div> -->
 
@@ -812,36 +1053,111 @@
             <th>CH4(kg)</th>
         </tr>
 
-        {% for vehiculo in emisiones %}
-        {% if vehiculo.source_subtype_id == 4 %}
+        
+        
         <tr>
-            <td>{{ vehiculo.vehicle_category_id }}</td>
-            <td>{{ vehiculo.has_proposal  }}</td>
-            <td>{{ vehiculo.proposal_description  }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_factor_n2o }}</td>
-            <td>{{ vehiculo.conventional_factor_co2 }}</td>
-            <td>{{ vehiculo.conventional_factor_ch4 }}</td>
+            <td>None</td>
+            <td>False</td>
+            <td></td>
+            <td>120.0000000000</td>
+            <td>None</td>
+            <td>120.0000000000</td>
+            <td>120.0000000000</td>
+            <td>0.0</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.cef_n20 }}</td>
-            <td>{{ vehiculo.cef_co2 }}</td>
-            <td>{{ vehiculo.cef_ch4 }}</td>
-            <td>{{ vehiculo.factors_unit }}</td>
+            <td>0.0000000000</td>
+            <td>18.0711252000</td>
+            <td>0.0000000000</td>
+            <td>Kg/gal</td>
             
-            <td>{{ vehiculo.observations }}</td>
-            <td>{{ vehiculo.proposal_factor_n2o }}</td>
+            <td></td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.proposal_factor_co2 }}</td>
-            <td>{{ vehiculo.proposal_factor_ch4 }}</td>
-            <td>{{ vehiculo.pef_n20 }}</td>
-            <td>{{ vehiculo.pef_co2 }}</td>
-            <td>{{ vehiculo.pef_ch4 }}</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>18.0711252000</td>
+            <td>0.0000000000</td>
         </tr>
-        {% endif %}
-    {% endfor %}
+        
+    
+        
+    
+        
+    
+        
+        <tr>
+            <td>None</td>
+            <td>False</td>
+            <td></td>
+            <td>52.3200000000</td>
+            <td>None</td>
+            <td>52.3200000000</td>
+            <td>52.3200000000</td>
+            <td>0.0</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
+
+            <td>0.0000000000</td>
+            <td>7.8790105872</td>
+            <td>0.0000000000</td>
+            <td>Kg/gal</td>
+            
+            <td></td>
+            <td>0.0</td>
+
+            <td>0.15059271</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>7.8790105872</td>
+            <td>0.0000000000</td>
+        </tr>
+        
+    
+        
+    
+        
+        <tr>
+            <td>None</td>
+            <td>True</td>
+            <td>Disminución de cantidad de portátiles usados
+</td>
+            <td>12.3200000000</td>
+            <td>None</td>
+            <td>12.3200000000</td>
+            <td>12.3200000000</td>
+            <td>0.0</td>
+            <td>0.15059271</td>
+            <td>0.0</td>
+
+            <td>0.0000000000</td>
+            <td>1.8553021872</td>
+            <td>0.0000000000</td>
+            <td>Kg/Kwh</td>
+            
+            <td></td>
+            <td>0.0</td>
+
+            <td>0.177</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>1.3876800000</td>
+            <td>0.0000000000</td>
+        </tr>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
     </table>
 <!-- </div> -->
 
@@ -885,36 +1201,83 @@
             <th>CH4(kg)</th>
         </tr>
 
-        {% for vehiculo in emisiones %}
-        {% if vehiculo.source_subtype_id == 5 %}
+        
+        
+    
+        
         <tr>
-            <td>{{ vehiculo.vehicle_category_id }}</td>
-            <td>{{ vehiculo.has_proposal  }}</td>
-            <td>{{ vehiculo.proposal_description  }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_id }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_fuel_consumption }}</td>
-            <td>{{ vehiculo.conventional_factor_n2o }}</td>
-            <td>{{ vehiculo.conventional_factor_co2 }}</td>
-            <td>{{ vehiculo.conventional_factor_ch4 }}</td>
+            <td>None</td>
+            <td>False</td>
+            <td></td>
+            <td>0.0000000000</td>
+            <td>None</td>
+            <td>0.0000000000</td>
+            <td>0.0000000000</td>
+            <td>0.0</td>
+            <td>1.33</td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.cef_n20 }}</td>
-            <td>{{ vehiculo.cef_co2 }}</td>
-            <td>{{ vehiculo.cef_ch4 }}</td>
-            <td>{{ vehiculo.factors_unit }}</td>
+            <td>0.0000000000</td>
+            <td>623770.0000000000</td>
+            <td>0.0000000000</td>
+            <td>Kg/gal</td>
             
-            <td>{{ vehiculo.observations }}</td>
-            <td>{{ vehiculo.proposal_factor_n2o }}</td>
+            <td></td>
+            <td>0.0</td>
 
-            <td>{{ vehiculo.proposal_factor_co2 }}</td>
-            <td>{{ vehiculo.proposal_factor_ch4 }}</td>
-            <td>{{ vehiculo.pef_n20 }}</td>
-            <td>{{ vehiculo.pef_co2 }}</td>
-            <td>{{ vehiculo.pef_ch4 }}</td>
+            <td>1.33</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>623770.0000000000</td>
+            <td>0.0000000000</td>
         </tr>
-        {% endif %}
-    {% endfor %}
+        
+    
+        
+    
+        
+    
+        
+        <tr>
+            <td>None</td>
+            <td>False</td>
+            <td></td>
+            <td>0.0000000000</td>
+            <td>None</td>
+            <td>0.0000000000</td>
+            <td>0.0000000000</td>
+            <td>0.0</td>
+            <td>0.17</td>
+            <td>0.0</td>
+
+            <td>0.0000000000</td>
+            <td>7719.7680000000</td>
+            <td>0.0000000000</td>
+            <td>Kg/gal</td>
+            
+            <td></td>
+            <td>0.0</td>
+
+            <td>0.17</td>
+            <td>0.0</td>
+            <td>0.0000000000</td>
+            <td>7719.7680000000</td>
+            <td>0.0000000000</td>
+        </tr>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
     </table>
 <!-- </div> -->
 
@@ -940,20 +1303,163 @@
         </tr>
 
 
-        {% for huellacarbono in monthly %}
+        
         <tr>
-            <td>{{ huellacarbono.pef_ch4 }}</td>
-            <td>{{ huellacarbono.cet_n2o }}</td>
-            <td>{{ huellacarbono.cet_co2 }}</td>
-            <td>{{ huellacarbono.cet_ch4 }}</td>
-            <td>{{ huellacarbono.pet_n2o }}</td>
-            <td>{{ huellacarbono.pet_co2 }}</td>
-            <td>{{ huellacarbono.pet_ch4 }}</td>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
 
-            <td>{{ huellacarbono.total_peg_co2 }}</td>
-            <td>{{ huellacarbono.total_peg_co2 }}</td>
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
         </tr>
-        {% endfor %}
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673712.866675000055693090</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673712.866675000055693090</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673712.866675000055693090</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
     </table>
 
 
@@ -970,20 +1476,163 @@
             <th>Emisiones totales con propuesta(Ton CO2e) </th>
         </tr>
  
-        {% for huellacarbono in monthly %}
+        
         <tr>
-            <td>{{ huellacarbono.pef_ch4 }}</td>
-            <td>{{ huellacarbono.cet_n2o }}</td>
-            <td>{{ huellacarbono.cet_co2 }}</td>
-            <td>{{ huellacarbono.cet_ch4 }}</td>
-            <td>{{ huellacarbono.pet_n2o }}</td>
-            <td>{{ huellacarbono.pet_co2 }}</td>
-            <td>{{ huellacarbono.pet_ch4 }}</td>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
 
-            <td>{{ huellacarbono.total_peg_co2 }}</td>
-            <td>{{ huellacarbono.total_peg_co2 }}</td>
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
         </tr>
-        {% endfor %}
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673730.937799999956041574</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673712.866675000055693090</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673712.866675000055693090</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
+        <tr>
+            <td></td>
+            <td>6.796636265300000090</td>
+            <td>673712.866675000055693090</td>
+            <td>1.322243498399999995</td>
+            <td>59.822259000000002516</td>
+            <td>3334.988259520000156044</td>
+            <td>0.009860877890000000</td>
+
+            <td>3334.988259520000156044</td>
+            <td>3334.988259520000156044</td>
+        </tr>
+        
         <tr>
             <td colspan="7">Total huella de carbono trimestral (Ton CO2e)</td>
             <th>6.122</th>

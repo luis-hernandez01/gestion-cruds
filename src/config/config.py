@@ -30,7 +30,7 @@ DEPARTAMENTOS_GEOJSON: str = "departamentos_colombia.geojson"
 DEBUG: bool = False
 
 # SCHEMAS DIFERENTES DENTRO DE LA MISMA BASE
-SCHEMA_NAMES = ["Aika", "Wayra"]
+SCHEMA_NAMES = ["Aika", "wayra"]
 
 
 

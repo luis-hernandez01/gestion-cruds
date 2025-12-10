@@ -20,18 +20,19 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/{schema}/all")
-def list_all(schema: str, 
+@router.get("/{schema}/combustibles_emision/all")
+def list_all(schema: Optional[str], request: Request,
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     return CombustibleService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/{schema}/", response_model=PaginacionSchema)
-def listar(schema: str, 
+@router.get("/{schema}/combustibles_emision/", response_model=PaginacionSchema)
+def listar(schema: Optional[str], request: Request,
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -43,6 +44,7 @@ def listar(schema: str,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ) -> Dict[str, Any]:
+    schema = request.state.schema
     skip = (page - 1) * per_page
     limit = per_page
     data = CombustibleService(db, schema).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
@@ -62,29 +64,31 @@ def listar(schema: str,
     # endpoin de crear registro
 
 
-@router.post("/{schema}/")
-def create(schema: str, 
+@router.post("/{schema}/combustibles_emision/")
+def create(schema: Optional[str], 
     request: Request,
     payload: CombustibleCreate,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = CombustibleService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{schema}/{combustible_id}")
-def get_show(schema: str, combustible_id: int, 
+@router.get("/{schema}/combustibles_emision/{combustible_id}")
+def get_show(schema: Optional[str], request: Request, combustible_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     return CombustibleService(db, schema).show(combustible_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{schema}/{combustible_id}")
-def update(schema: str, 
+@router.put("/{schema}/combustibles_emision/{combustible_id}")
+def update(schema: Optional[str], 
     request: Request,
     combustible_id: int,
     payload: CombustibleUpdate,
@@ -92,29 +96,32 @@ def update(schema: str,
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = CombustibleService(db, schema).update(combustible_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{schema}/{combustible_id}")
-def delete(schema: str, 
+@router.delete("/{schema}/combustibles_emision/{combustible_id}")
+def delete(schema: Optional[str], 
     request: Request,
     combustible_id: int,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = CombustibleService(db, schema).delete(combustible_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{schema}/{combustible_id}/reactivate")
-def reactivates(schema: str, request: Request, 
+@router.post("/{schema}/combustibles_emision/{combustible_id}/reactivate")
+def reactivates(schema: Optional[str], request: Request, 
                         combustible_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = CombustibleService(db, schema).reactivate(combustible_id, request, tokenpayload)
     return {"data": result}

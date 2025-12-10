@@ -17,18 +17,19 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/{schema}/all")
-def list_all(schema: str, 
+@router.get("/{schema}/unidad_ejecutora/all")
+def list_all(schema: Optional[str],  request: Request,
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     return UnidadEjecutoraService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/{schema}/", response_model=PaginacionSchema)
-def list_unidades(schema: str, 
+@router.get("/{schema}/unidad_ejecutora/", response_model=PaginacionSchema)
+def list_unidades(schema: Optional[str],  request: Request,
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -40,6 +41,7 @@ def list_unidades(schema: str,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ) -> Dict[str, Any]:
+    schema = request.state.schema
     skip = (page - 1) * per_page
     limit = per_page
     data = UnidadEjecutoraService(db, schema).list_unidad_ejecutora(activo=activo, filtros=filtros,
@@ -60,29 +62,31 @@ def list_unidades(schema: str,
     # endpoin de crear registro
 
 
-@router.post("/{schema}/")
-def create_unidades(schema: str, 
+@router.post("/{schema}/unidad_ejecutora/")
+def create_unidades(schema: Optional[str], 
     request: Request,
     payload: UnidadEjecutoraCreate,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = UnidadEjecutoraService(db, schema).create_unidad(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{schema}/{unidad_id}")
-def get_show(schema: str, unidad_id: int, 
+@router.get("/{schema}/unidad_ejecutora/{unidad_id}")
+def get_show(schema: Optional[str], request: Request, unidad_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     return UnidadEjecutoraService(db, schema).show(unidad_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{schema}/{unidad_id}")
-def update_unidades(schema: str, 
+@router.put("/{schema}/unidad_ejecutora/{unidad_id}")
+def update_unidades(schema: Optional[str], 
     request: Request,
     unidad_id: int,
     payload: UnidadEjecutoraUpdate,
@@ -90,29 +94,32 @@ def update_unidades(schema: str,
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = UnidadEjecutoraService(db, schema).update_unidad(unidad_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{schema}/{unidad_id}")
-def delete_unidades(schema: str, 
+@router.delete("/{schema}/unidad_ejecutora/{unidad_id}")
+def delete_unidades(schema: Optional[str], 
     request: Request,
     unidad_id: int,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = UnidadEjecutoraService(db, schema).delete_unidad(unidad_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{schema}/{unidad_id}/reactivate")
-def reactivates(schema: str, request: Request, 
+@router.post("/{schema}/unidad_ejecutora/{unidad_id}/reactivate")
+def reactivates(schema: Optional[str], request: Request, 
                         unidad_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = UnidadEjecutoraService(db, schema).reactivate(unidad_id, request, tokenpayload)
     return {"data": result}

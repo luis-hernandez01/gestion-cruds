@@ -15,6 +15,7 @@ class ActividadeService:
         self.schema = schema
         self.table = get_actividades_table(schema)
         
+        
     def all(self):
         return (
             self.db.query(self.table)

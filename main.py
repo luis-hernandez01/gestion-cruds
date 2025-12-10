@@ -51,6 +51,9 @@ from src.routes import (
     Periosidad_informe_route
 )
 
+from src.config.middleware import SchemaMiddleware
+
+
 # # --- Crear tablas en todas las bases parametrizadas ---
 
 # for base, eng in zip(Base, engine):
@@ -63,6 +66,9 @@ app = FastAPI(title="Servicios parametrizables", version="1.0.0",
             docs_url="/docs",           # Swagger
             redoc_url="/redoc",         # Redoc
     )
+
+app.add_middleware(SchemaMiddleware)
+
     
 # configuracion de CORS
 # permite que aplicaciones externas (por ejemplo,
@@ -83,27 +89,27 @@ app.add_middleware(
 # registrando mis rutas existentes de las difrentes APIs
 # Aquí se incluyen las rutas definidas en la carpeta 'routes'.
 
-app.include_router(Periosidad_informe_route.router, prefix="/periosidad", tags=["Periosidad"])
-app.include_router(Actos_administrativos_route.router, prefix="/actos_administrativos", tags=["Actos administrativos"])
-app.include_router(Tipo_estudio_ambiental_route.router, prefix="/tipo_estudio_ambiental", tags=["Tipo estudio ambiental"])
-app.include_router(Tipologia_proyecto_route.router, prefix="/tipologia", tags=["Ttipologia proyecto"])
-app.include_router(Ciclo_vida_route.router, prefix="/ciclo_vida", tags=["Ciclo de vida"])
-app.include_router(Tipo_contrato_route.router, prefix="/tipo_contrato", tags=["Tipo contrato"])
+app.include_router(Periosidad_informe_route.router, prefix="", tags=["Periosidad"])
+app.include_router(Actos_administrativos_route.router, prefix="", tags=["Actos administrativos"])
+app.include_router(Tipo_estudio_ambiental_route.router, prefix="", tags=["Tipo estudio ambiental"])
+app.include_router(Tipologia_proyecto_route.router, prefix="", tags=["Ttipologia proyecto"])
+app.include_router(Ciclo_vida_route.router, prefix="", tags=["Ciclo de vida"])
+app.include_router(Tipo_contrato_route.router, prefix="", tags=["Tipo contrato"])
 
 
 
 
 app.include_router(migrador_route.router, prefix="/migrar", tags=["Migrar"])
 
-app.include_router(medidas_emisiones_route.router, prefix="/medida", tags=["Medida"])
-app.include_router(tipo_medidas_route.router, prefix="/tipo_medida", tags=["tipo de medidas"])
+app.include_router(medidas_emisiones_route.router, prefix="", tags=["Medida"])
+app.include_router(tipo_medidas_route.router, prefix="", tags=["tipo de medidas"])
 
-app.include_router(factor_emisiones_route.router, prefix="/factores_emisiones", tags=["factores emisiones"])
+app.include_router(factor_emisiones_route.router, prefix="", tags=["factores emisiones"])
 
-app.include_router(Tipofuente_route.router, prefix="/tipo_fuentes", tags=["Tipo fuentes"])
-app.include_router(Equipoproceso_route.router, prefix="/equipo_proceso", tags=["Equipo proceso"])
+app.include_router(Tipofuente_route.router, prefix="", tags=["Tipo fuentes"])
+app.include_router(Equipoproceso_route.router, prefix="", tags=["Equipo proceso"])
 
-app.include_router(actividades_route.router, prefix="/actividades", tags=["Actividades"])
+app.include_router(actividades_route.router, prefix="", tags=["Actividades"])
 
 app.include_router(informe_route.router, prefix="/informes", tags=["Informes"])
 app.include_router(informe_via_link_route.router, prefix="/informes_via_link", tags=["Informes via link"])
@@ -111,85 +117,85 @@ app.include_router(calculos_excel_route.router, prefix="/calculos", tags=["calcu
 
 app.include_router(calculos_excel_prueba.router, prefix="/calculos_pueba", tags=["calculos excel pueba"])
 
-app.include_router(Categoria_fuentefija_route.router, prefix="/categoria_fuentefija", tags=["Categoria fuentes fijas"])
-app.include_router(Alcance_fuentefija_rouete.router, prefix="/alcance_funtefija", tags=["Alcance fuentes fijas"])
+app.include_router(Categoria_fuentefija_route.router, prefix="", tags=["Categoria fuentes fijas"])
+app.include_router(Alcance_fuentefija_rouete.router, prefix="", tags=["Alcance fuentes fijas"])
 
-app.include_router(Combustibles_emisiones_route.router, prefix="/combustibles_emision", tags=["Combutibles"])
-app.include_router(Categoria_emisiones_route.router, prefix="/categoria_emision", tags=["Categoria vehiculo"])
-app.include_router(Unidades_factores_emision_route.router, prefix="/unidades_factor", tags=["Unidades de los factores de emisión"])
+app.include_router(Combustibles_emisiones_route.router, prefix="", tags=["Combutibles"])
+app.include_router(Categoria_emisiones_route.router, prefix="", tags=["Categoria vehiculo"])
+app.include_router(Unidades_factores_emision_route.router, prefix="", tags=["Unidades de los factores de emisión"])
 
 
-app.include_router(trimestre_route.router, prefix="/trimestre", tags=["Trimestre"])
-app.include_router(presenta_route.router, prefix="/presenta", tags=["Presenta"])
+app.include_router(trimestre_route.router, prefix="", tags=["Trimestre"])
+app.include_router(presenta_route.router, prefix="", tags=["Presenta"])
 
 app.include_router(
     municipio_route.router,
-    prefix="/municipio",
+    prefix="",
     tags=["Municipios"],
 )
 
 app.include_router(
     departamento_route.router,
-    prefix="/departamento",
+    prefix="",
     tags=["Departamentos"],
 )
 
 app.include_router(
     profesion_route.router,
-    prefix="/profesion",
+    prefix="",
     tags=["Profesion"],
 )
 
 app.include_router(
     direccion_territorial_route.router,
-    prefix="/direccion_territorial",
+    prefix="",
     tags=["Direccion territorial"],
 )
 app.include_router(
-    tipos_proyectos_route.router, prefix="/tipos_proyectos", tags=["Tipos de proyectos"]
+    tipos_proyectos_route.router, prefix="", tags=["Tipos de proyectos"]
 )
 
-app.include_router(tramo_route.router, prefix="/tramos", tags=["Tramos"])
+app.include_router(tramo_route.router, prefix="", tags=["Tramos"])
 
 app.include_router(
-    rutas_viales_route.router, prefix="/rutas_viales", tags=["Rutas viales"]
+    rutas_viales_route.router, prefix="", tags=["Rutas viales"]
 )
 
 app.include_router(
-    unidad_ejecutora_route.router, prefix="/unidad_ejecutora", tags=["Unidad ejecutora"]
+    unidad_ejecutora_route.router, prefix="", tags=["Unidad ejecutora"]
 )
 app.include_router(
     clasificaciones_proyecto_route.router,
-    prefix="/clasificaciones_proyecto",
+    prefix="",
     tags=["Clasificacion proyectos"],
 )
 app.include_router(
     TipoClasificacionModos_route.router,
-    prefix="/tipo_clasificacion_modos",
+    prefix="",
     tags=["Tipo clasifificacion de modos"],
 )
-app.include_router(modo_route.router, prefix="/modo", tags=["Modo"])
+app.include_router(modo_route.router, prefix="", tags=["Modo"])
 
 app.include_router(
-    catalogo_route.router, prefix="/catalogo", 
+    catalogo_route.router, prefix="", 
     tags=["Catalogo de modos por tipo clasificacion"]
 )
 
 app.include_router(
     proyecto_route.router,
-    prefix="/proyecto",
+    prefix="",
     tags=["Proyecto"],
 )
 
 app.include_router(
     contratos_route.router,
-    prefix="/contratos",
+    prefix="",
     tags=["Contratos"],
 )
 
-app.include_router(polygon.router)
-app.include_router(line.router)
-app.include_router(point.router)
+app.include_router(polygon.router, prefix="")
+app.include_router(line.router, prefix="")
+app.include_router(point.router, prefix="")
 
 
 #  Documentación con Swagger/OpenAPI

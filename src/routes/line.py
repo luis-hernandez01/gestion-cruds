@@ -1,22 +1,24 @@
 """
 Endpoints de API para análisis de líneas
 """
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from src.config.config import (get_db)
 from src.models.schemas import LineCoordinates, APIResponse
 from src.services.line_service import line_service
 from src.utils.jwt_validator_util import verify_jwt_token
+from typing import Optional
 
-router = APIRouter(prefix="/api/line", tags=["Line Analysis"])
+router = APIRouter( tags=["Line Analysis"])
 
 
-@router.post("/{schema}/analyze", response_model=APIResponse)
-async def analyze_line(schema: str, 
+@router.post("/{schema}/api/line/analyze", response_model=APIResponse)
+async def analyze_line(schema: Optional[str], request: Request,
     line_data: LineCoordinates,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     """
     Analiza una línea y retorna los municipios y departamentos por donde pasa
     

@@ -17,18 +17,19 @@ router = APIRouter()
 
 # mostrar todo 
 
-@router.get("/{schema}/all")
-def list_all(schema: str, 
+@router.get("/{schema}/categoria_emision/all")
+def list_all(schema: Optional[str], request: Request,
     # de esta manera llamo solamente la primera base de datos
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     return CategoriaService(db, schema).all()
     
 
 # endpoint de listar data con paginacion incluida
-@router.get("/{schema}/", response_model=PaginacionSchema)
-def listar(schema: str, 
+@router.get("/{schema}/categoria_emision/", response_model=PaginacionSchema)
+def listar(schema: Optional[str], request: Request,
     activo: Optional[bool] = Query(True, description="Filtrar por activo (true o false)"),
     filtros: Optional[str] = Query(
         None,
@@ -40,6 +41,7 @@ def listar(schema: str,
     db: Session = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ) -> Dict[str, Any]:
+    schema = request.state.schema
     skip = (page - 1) * per_page
     limit = per_page
     data = CategoriaService(db, schema).lista(activo=activo, filtros=filtros, skip=skip, limit=limit)
@@ -59,29 +61,31 @@ def listar(schema: str,
     # endpoin de crear registro
 
 
-@router.post("/{schema}/")
-def create(schema: str, 
+@router.post("/{schema}/categoria_emision/")
+def create(schema: Optional[str], 
     request: Request,
     payload: CategoriaCreate,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = CategoriaService(db, schema).create(payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint de show o ver registro
-@router.get("/{schema}/{categoria_id}")
-def get_show(schema: str, categoria_id: int, 
+@router.get("/{schema}/categoria_emision/{categoria_id}")
+def get_show(schema: Optional[str], request: Request, categoria_id: int, 
                 db: Session = Depends(get_db),
                 tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     return CategoriaService(db, schema).show(categoria_id)
 
 
 # endpoin para actualizar un registro x
-@router.put("/{schema}/{categoria_id}")
-def update_unidades(schema: str, 
+@router.put("/{schema}/categoria_emision/{categoria_id}")
+def update_unidades(schema: Optional[str], 
     request: Request,
     categoria_id: int,
     payload: CategoriaUpdate,
@@ -89,29 +93,32 @@ def update_unidades(schema: str,
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = CategoriaService(db, schema).update(categoria_id, payload, request, tokenpayload)
     return {"data": result}
 
 
 # endpoint para eliminar un registro logicamente
-@router.delete("/{schema}/{categoria_id}")
-def delete_unidades(schema: str, 
+@router.delete("/{schema}/categoria_emision/{categoria_id}")
+def delete_unidades(schema: Optional[str], 
     request: Request,
     categoria_id: int,
     # de esta manera llamo todas las bases de datos existentes
     db: list[Session] = Depends(get_db),
     tokenpayload: dict = Depends(verify_jwt_token),
 ):
+    schema = request.state.schema
     result = CategoriaService(db, schema).delete(categoria_id, request, tokenpayload)
     return {"data": result}
 
 
 
-@router.post("/{schema}/{categoria_id}/reactivate")
-def reactivates(schema: str, request: Request, 
+@router.post("/{schema}/categoria_emision/{categoria_id}/reactivate")
+def reactivates(schema: Optional[str], request: Request, 
                         categoria_id: int, 
                         # de esta manera llamo todas las bases de datos existentes
                         db: list[Session] = Depends(get_db),
                         tokenpayload: dict = Depends(verify_jwt_token)):
+    schema = request.state.schema
     result = CategoriaService(db, schema).reactivate(categoria_id, request, tokenpayload)
     return {"data": result}
